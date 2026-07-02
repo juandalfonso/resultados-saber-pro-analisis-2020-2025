@@ -23,7 +23,7 @@ Los datos se descargaron de la siguiente dirección web: https://www.icfes.gov.c
 
 En el notebook se realiza:
 
-- Lectura de los 6 archivos de Excel (2020–2025)
+- Lectura de los 6 archivos de Excel (2020–2025) 
 - Consolidación en un único `DataFrame` (`consolidateddf`)
 - Limpieza básica de campos y creación de variables auxiliares (`Year`, `Semester`)
 
