@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saber Pro Javeriana · Análisis Comparativo v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root,[data-theme="light"]{
+  --color-bg:#f7f6f2;--color-surface:#f9f8f5;--color-surface-2:#fdfcfa;
+  --color-surface-offset:#f0ede8;--color-surface-dynamic:#e8e4de;
+  --color-divider:#dcd9d4;--color-border:#d1cec7;
+  --color-text:#1e1c17;--color-text-muted:#6b6a65;--color-text-faint:#b5b4b0;
+  --color-text-inverse:#f9f8f4;
+  --color-primary:#004165;--color-primary-hover:#003050;
+  --color-primary-light:#e3edf4;--color-primary-mid:#7aabbf;
+  --color-accent:#c5910e;--color-accent-light:#fdf4e0;
+  --color-success:#3d7a1f;--color-success-light:#e3f0da;
+  --color-error:#a02828;--color-error-light:#f5e1e1;
+  --color-warning:#9a5c00;--color-warning-light:#fdecd4;
+  --radius-sm:.375rem;--radius-md:.5rem;--radius-lg:.75rem;--radius-xl:1.25rem;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.07);--shadow-md:0 4px 16px rgba(0,0,0,.09);
+  --font-display:"Instrument Serif",Georgia,serif;
+  --font-body:"DM Sans","Helvetica Neue",sans-serif;
+  --text-xs:clamp(.75rem,.7rem + .2vw,.875rem);
+  --text-sm:clamp(.875rem,.82rem + .28vw,1rem);
+  --text-base:clamp(1rem,.95rem + .22vw,1.125rem);
+  --text-lg:clamp(1.1rem,.95rem + .7vw,1.5rem);
+  --text-xl:clamp(1.4rem,1.1rem + 1.2vw,2.1rem);
+  --text-2xl:clamp(1.9rem,1.2rem + 2.4vw,3.2rem);
+  --space-1:.25rem;--space-2:.5rem;--space-3:.75rem;--space-4:1rem;
+  --space-5:1.25rem;--space-6:1.5rem;--space-8:2rem;--space-10:2.5rem;
+  --space-12:3rem;--space-16:4rem;--space-20:5rem;
+  --content-default:1160px;--content-wide:1380px;
+  --transition:180ms cubic-bezier(.16,1,.3,1);
+}
+[data-theme="dark"]{
+  --color-bg:#141210;--color-surface:#1a1917;--color-surface-2:#1f1e1c;
+  --color-surface-offset:#201e1b;--color-surface-dynamic:#2a2826;
+  --color-divider:#2c2a27;--color-border:#3a3835;
+  --color-text:#d2d1cf;--color-text-muted:#777673;--color-text-faint:#555452;
+  --color-primary:#5ca7ca;--color-primary-hover:#3d8fb0;
+  --color-primary-light:#1a2d38;--color-primary-mid:#3d7a95;
+  --color-accent:#e8b43c;--color-accent-light:#2d2310;
+  --color-success:#6aaa42;--color-success-light:#1c3010;
+  --color-error:#dd6060;--color-error-light:#301414;
+  --color-warning:#e09030;--color-warning-light:#2d2010;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.25);--shadow-md:0 4px 16px rgba(0,0,0,.35);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:62px;-webkit-font-smoothing:antialiased}
+body{font-family:var(--font-body);font-size:var(--text-base);color:var(--color-text);background:var(--color-bg);min-height:100dvh;line-height:1.6}
+img,svg{display:block;max-width:100%}
+button,input,select{font:inherit;color:inherit;cursor:pointer}
+h1,h2,h3,h4{text-wrap:balance;line-height:1.15}
+a,button,[role="button"]{transition:color var(--transition),background var(--transition),border-color var(--transition),box-shadow var(--transition)}
+
+/* ── LAYOUT ── */
+.container{max-width:var(--content-default);margin-inline:auto;padding-inline:var(--space-6)}
+.cw{max-width:var(--content-wide);margin-inline:auto;padding-inline:var(--space-6)}
+.sec{padding-block:clamp(var(--space-12),5vw,var(--space-20))}
+.bg-alt{background:var(--color-surface-offset)}
+.g2{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(500px,100%),1fr));gap:var(--space-6)}
+.g3{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr));gap:var(--space-5)}
+.g4{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:var(--space-4)}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:color-mix(in oklab,var(--color-surface) 92%,transparent);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--color-border)}
+.nav-i{display:flex;align-items:center;gap:var(--space-5);max-width:var(--content-wide);margin-inline:auto;padding:0 var(--space-6);height:60px}
+.logo{display:flex;align-items:center;gap:var(--space-3);text-decoration:none;flex-shrink:0}
+.logo-txt{font-family:var(--font-display);font-size:1rem;color:var(--color-text)}
+.logo-txt span{color:var(--color-primary)}
+.nav-links{display:flex;align-items:center;gap:2px;overflow-x:auto;scrollbar-width:none;flex:1}
+.nav-links::-webkit-scrollbar{display:none}
+.nl{padding:6px 12px;border-radius:var(--radius-md);font-size:var(--text-sm);font-weight:500;color:var(--color-text-muted);text-decoration:none;white-space:nowrap;border:none;background:none}
+.nl:hover,.nl.active{color:var(--color-primary);background:var(--color-primary-light)}
+.btn-icon{width:34px;height:34px;border-radius:var(--radius-md);background:none;border:1px solid var(--color-border);display:flex;align-items:center;justify-content:center;color:var(--color-text-muted);flex-shrink:0}
+.btn-icon:hover{background:var(--color-surface-offset);color:var(--color-text)}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(140deg,#003050 0%,#004165 50%,#005a8e 100%);color:#f7f6f2;padding-block:clamp(var(--space-12),7vw,var(--space-20));overflow:hidden;position:relative}
+.hero::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 60% 70% at 80% 50%,rgba(197,145,14,.18) 0%,transparent 60%)}
+.hero-g{display:grid;grid-template-columns:1fr auto;gap:var(--space-10);align-items:center;position:relative;z-index:1}
+.hero-eyebrow{font-size:var(--text-xs);font-weight:700;letter-spacing:.12em;text-transform:uppercase;opacity:.65;margin-bottom:var(--space-3)}
+.hero-h{font-family:var(--font-display);font-size:var(--text-2xl);line-height:1.08;margin-bottom:var(--space-4)}
+.hero-h em{font-style:italic;color:#f5c842}
+.hero-desc{font-size:var(--text-sm);opacity:.82;max-width:55ch;line-height:1.75;margin-bottom:var(--space-5)}
+.hero-pills{display:flex;gap:var(--space-2);flex-wrap:wrap}
+.hp{padding:5px 14px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:9999px;font-size:var(--text-xs);font-weight:600}
+.hero-kpis{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3);min-width:260px}
+.hkpi{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.16);border-radius:var(--radius-xl);padding:var(--space-4) var(--space-5);text-align:center;backdrop-filter:blur(8px)}
+.hkpi-v{font-family:var(--font-display);font-size:var(--text-xl);font-weight:700;color:#f5c842}
+.hkpi-l{font-size:var(--text-xs);opacity:.7;margin-top:3px}
+
+/* ── SECTION HEADER ── */
+.sh{margin-bottom:clamp(var(--space-8),4vw,var(--space-12))}
+.sh-lbl{font-size:var(--text-xs);font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--color-primary);margin-bottom:var(--space-3)}
+.sh-title{font-family:var(--font-display);font-size:var(--text-xl);color:var(--color-text);margin-bottom:var(--space-3)}
+.sh-desc{font-size:var(--text-sm);color:var(--color-text-muted);max-width:66ch;line-height:1.75}
+
+/* ── CARDS ── */
+.card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);padding:var(--space-6);box-shadow:var(--shadow-sm)}
+.card-lg{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);padding:clamp(var(--space-5),3vw,var(--space-8));box-shadow:var(--shadow-sm)}
+.ct{font-weight:700;font-size:var(--text-base);color:var(--color-text);margin-bottom:3px}
+.cs{font-size:var(--text-xs);color:var(--color-text-muted);margin-bottom:var(--space-5)}
+.cw-s{position:relative;width:100%;height:260px}
+.cw-m{position:relative;width:100%;height:340px}
+.cw-l{position:relative;width:100%;height:420px}
+
+/* ── KPI ── */
+.kpi-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:var(--space-4)}
+.kpi{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);padding:var(--space-5)}
+.kpi-v{font-family:var(--font-display);font-size:var(--text-xl);font-weight:700;font-variant-numeric:tabular-nums;color:var(--color-text)}
+.kpi-l{font-size:var(--text-xs);color:var(--color-text-muted);margin-top:3px;font-weight:500}
+.kpi-d{font-size:var(--text-xs);font-weight:600;margin-top:var(--space-2)}
+.du{color:var(--color-success)}.dd{color:var(--color-error)}.df{color:var(--color-text-faint)}
+
+/* ── TABS ── */
+.tabs{display:flex;gap:4px;flex-wrap:wrap;padding:5px;background:var(--color-surface-offset);border-radius:var(--radius-xl);margin-bottom:var(--space-6);width:fit-content;max-width:100%}
+.tab{padding:6px 16px;border-radius:var(--radius-lg);font-size:var(--text-sm);font-weight:600;border:none;background:none;color:var(--color-text-muted)}
+.tab.active{background:var(--color-surface);color:var(--color-primary);box-shadow:var(--shadow-sm)}
+.tab:hover:not(.active){color:var(--color-text);background:var(--color-surface-dynamic)}
+.tp{display:none}.tp.active{display:block}
+
+/* ── PILLS ── */
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:var(--space-5)}
+.pill{padding:4px 14px;border-radius:9999px;font-size:var(--text-sm);font-weight:600;border:1.5px solid var(--color-border);background:none;color:var(--color-text-muted)}
+.pill.active{background:var(--color-primary);border-color:var(--color-primary);color:white}
+.pill:hover:not(.active){border-color:var(--color-primary);color:var(--color-primary)}
+
+/* ── TABLE ── */
+.tw{overflow-x:auto;border-radius:var(--radius-lg);border:1px solid var(--color-border)}
+table{width:100%;border-collapse:collapse;font-size:var(--text-sm);font-variant-numeric:tabular-nums}
+thead th{background:var(--color-surface-offset);padding:10px 14px;text-align:left;font-weight:700;font-size:var(--text-xs);letter-spacing:.05em;text-transform:uppercase;color:var(--color-text-muted)}
+tbody td{padding:10px 14px;border-top:1px solid var(--color-divider)}
+tbody tr:hover td{background:var(--color-surface-offset)}
+tbody tr.hl td{background:var(--color-primary-light)}
+tbody tr.hl td:first-child{font-weight:700;color:var(--color-primary)}
+
+/* ── BADGES ── */
+.bdg{display:inline-flex;align-items:center;padding:2px 8px;border-radius:9999px;font-size:var(--text-xs);font-weight:700;white-space:nowrap}
+.bc4{background:var(--color-success-light);color:var(--color-success)}
+.bc3{background:var(--color-warning-light);color:var(--color-warning)}
+.bc2{background:var(--color-error-light);color:var(--color-error)}
+.bc1{background:#f5e1e1;color:#7a0000}
+.bb{background:var(--color-primary-light);color:var(--color-primary)}
+
+/* ── PROGRESS ── */
+.pt{background:var(--color-surface-offset);border-radius:9999px;height:8px;overflow:hidden}
+.pf{height:100%;border-radius:9999px;background:linear-gradient(90deg,var(--color-primary),var(--color-primary-mid));transition:width .8s cubic-bezier(.16,1,.3,1)}
+
+/* ── COMP BAR ── */
+.cbar-g{display:flex;flex-direction:column;gap:var(--space-4)}
+.cbar-row{display:grid;grid-template-columns:160px 1fr 55px;align-items:center;gap:var(--space-3)}
+.cbar-lbl{font-size:var(--text-sm);font-weight:500;text-align:right;color:var(--color-text)}
+.cbar-track{background:var(--color-surface-offset);border-radius:9999px;height:9px;overflow:hidden}
+.cbar-fill{height:100%;border-radius:9999px}
+.cbar-val{font-size:var(--text-sm);font-weight:700;font-variant-numeric:tabular-nums}
+
+/* ── INSIGHT ── */
+.ins{background:var(--color-accent-light);border-left:3px solid var(--color-accent);border-radius:0 var(--radius-md) var(--radius-md) 0;padding:var(--space-4) var(--space-5);margin-top:var(--space-5)}
+.ins-lbl{font-size:var(--text-xs);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-accent);margin-bottom:var(--space-2)}
+.ins p{font-size:var(--text-sm);color:var(--color-text-muted);line-height:1.7;max-width:72ch}
+
+/* ── HEATMAP ── */
+.hcell{border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;cursor:default;transition:transform var(--transition);height:32px}
+.hcell:hover{transform:scale(1.06);z-index:2}
+
+/* ── SLIDER ── */
+.sl-g{display:flex;flex-direction:column;gap:var(--space-4)}
+.sl-row{display:flex;align-items:center;gap:var(--space-5)}
+.sl-lbl{font-size:var(--text-sm);font-weight:600;min-width:130px}
+.sl{-webkit-appearance:none;width:100%;height:5px;border-radius:3px;background:var(--color-surface-dynamic);outline:none;flex:1}
+.sl::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--color-primary);box-shadow:0 2px 8px rgba(0,65,101,.35);cursor:pointer}
+.sl::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--color-primary);border:none;cursor:pointer}
+.sl-v{font-size:var(--text-base);font-weight:700;font-variant-numeric:tabular-nums;color:var(--color-primary);min-width:48px;text-align:right}
+.inc-res{background:var(--color-primary-light);border:1px solid color-mix(in oklab,var(--color-primary) 30%,transparent);border-radius:var(--radius-xl);padding:var(--space-5);margin-top:var(--space-4)}
+.inc-v{font-family:var(--font-display);font-size:var(--text-xl);font-weight:700;color:var(--color-primary)}
+.inc-l{font-size:var(--text-xs);color:var(--color-text-muted);margin-top:2px}
+
+/* ── UPLOAD ── */
+.upz{border:2px dashed var(--color-border);border-radius:var(--radius-xl);padding:var(--space-10);text-align:center;cursor:pointer;background:var(--color-surface);transition:all var(--transition)}
+.upz:hover,.upz.drag{border-color:var(--color-primary);background:var(--color-primary-light)}
+.up-icon{width:44px;height:44px;margin:0 auto var(--space-4);color:var(--color-text-faint)}
+.upz:hover .up-icon,.upz.drag .up-icon{color:var(--color-primary)}
+.up-t{font-weight:700;margin-bottom:var(--space-2)}
+.up-d{font-size:var(--text-sm);color:var(--color-text-muted)}
+.up-status{margin-top:var(--space-4);padding:10px 16px;border-radius:var(--radius-lg);font-size:var(--text-sm);font-weight:600;display:none}
+.up-ok{display:block;background:var(--color-success-light);color:var(--color-success)}
+
+/* ── RADAR LEGEND ── */
+.rl{display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:var(--space-4);justify-content:center}
+.rl-item{display:flex;align-items:center;gap:6px;font-size:var(--text-xs);font-weight:500;color:var(--color-text-muted)}
+.rl-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+
+/* ── TWO COL ── */
+.tc{display:grid;grid-template-columns:1fr 330px;gap:var(--space-8);align-items:start}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-thumb{background:var(--color-border);border-radius:3px}
+
+@media(max-width:900px){.tc,.hero-g{grid-template-columns:1fr}.hero-kpis{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.kpi-g{grid-template-columns:1fr 1fr}.cbar-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-i">
+    <a href="#" class="logo">
+      <svg width="30" height="30" viewBox="0 0 34 34" fill="none">
+        <rect width="34" height="34" rx="7" fill="var(--color-primary)"/>
+        <path d="M7 10h6l4 14 4-14h6" stroke="#f5c842" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <circle cx="17" cy="26" r="2.4" fill="#f5c842"/>
+      </svg>
+      <span class="logo-txt"><span>Saber Pro</span> · Javeriana v2</span>
+    </a>
+    <div class="nav-links">
+      <a href="#resumen" class="nl active">Global</a>
+      <a href="#externa" class="nl">Comparativa Externa</a>
+      <a href="#interna" class="nl">Análisis Interno</a>
+      <a href="#competencias" class="nl">Competencias</a>
+      <a href="#prioritarios" class="nl">Prioritarios</a>
+      <a href="#incentivos" class="nl">Incentivos</a>
+    </div>
+    <button class="btn-icon" data-theme-toggle aria-label="Cambiar tema">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+    </button>
+  </div>
+</nav>
+
+<section class="hero" id="top">
+  <div class="cw">
+    <div class="hero-g">
+      <div>
+        <p class="hero-eyebrow">Pontificia Universidad Javeriana · 2020–2025</p>
+        <h1 class="hero-h">Resultados <em>Saber Pro</em><br>Análisis Comparativo Integral</h1>
+        <p class="hero-desc">Dashboard expandido con comparativa externa frente a las IES élite del país, análisis interno multidimensional por programa y competencia, evolución temporal y herramienta interactiva de incentivos con percentil dinámico.</p>
+        <div class="hero-pills">
+          <span class="hp">131.680 evaluados 2025</span>
+          <span class="hp">#10 Ranking nacional</span>
+          <span class="hp">86% programas C4</span>
+          <span class="hp">v2 · Más gráficas</span>
+        </div>
+      </div>
+      <div class="hero-kpis">
+        <div class="hkpi"><div class="hkpi-v">170,2</div><div class="hkpi-l">Media global 2025</div></div>
+        <div class="hkpi"><div class="hkpi-v">+5,0</div><div class="hkpi-l">vs Media nacional</div></div>
+        <div class="hkpi"><div class="hkpi-v">183,2</div><div class="hkpi-l">Mejor prueba</div></div>
+        <div class="hkpi"><div class="hkpi-v">56</div><div class="hkpi-l">Programas activos</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SEC 1: RESUMEN GLOBAL ══ -->
+<section class="sec" id="resumen">
+  <div class="cw">
+    <div class="sh">
+      <p class="sh-lbl">Panorama general</p>
+      <h2 class="sh-title">Resultados Globales 2020–2025</h2>
+      <p class="sh-desc">Evolución del desempeño, volumen de evaluados y posición dentro del ranking nacional de IES privadas de alta calidad.</p>
+    </div>
+    <div class="kpi-g" style="margin-bottom:var(--space-8)">
+      <div class="kpi"><div class="kpi-v">170,2</div><div class="kpi-l">Media global 2025</div><div class="kpi-d du">↑ +2,5 vs 2024</div></div>
+      <div class="kpi"><div class="kpi-v">131.680</div><div class="kpi-l">Evaluados 2025</div><div class="kpi-d du">↑ +9.400 vs 2024</div></div>
+      <div class="kpi"><div class="kpi-v">#10</div><div class="kpi-l">Ranking nacional</div><div class="kpi-d df">→ Estable</div></div>
+      <div class="kpi"><div class="kpi-v">48/56</div><div class="kpi-l">Programas C4</div><div class="kpi-d du">↑ 85,7%</div></div>
+      <div class="kpi"><div class="kpi-v">165,2</div><div class="kpi-l">Media nacional 2025</div><div class="kpi-d df">Q3 = 161</div></div>
+      <div class="kpi"><div class="kpi-v">+5,0</div><div class="kpi-l">Brecha vs nac.</div><div class="kpi-d du">↑ Sobre mediana</div></div>
+    </div>
+    <div class="g2">
+      <div class="card-lg">
+        <div class="ct">Evolución Media Global 2020–2025</div>
+        <div class="cs">Javeriana vs. media nacional · puntuación 100–300</div>
+        <div class="cw-m"><canvas id="cEvol"></canvas></div>
+        <div class="ins"><div class="ins-lbl">⚡ Insight</div><p>La Javeriana registró su punto más bajo en 2023 (167,7) y ha recuperado terreno en 2024–2025 alcanzando 170,2. La brecha respecto a la media nacional se redujo de +23 pts (2020) a +5 pts (2025), señal de que el sistema nacional mejoró más rápido.</p></div>
+      </div>
+      <div class="card-lg">
+        <div class="ct">Volumen de Evaluados por Año</div>
+        <div class="cs">Javeriana vs. Universidad Nacional de Colombia</div>
+        <div class="cw-m"><canvas id="cEval"></canvas></div>
+      </div>
+    </div>
+    <div class="card-lg" style="margin-top:var(--space-6)">
+      <div class="ct">Posición en el Ranking Nacional 2020–2025</div>
+      <div class="cs">Evolución de la posición entre IES de alto desempeño</div>
+      <div class="cw-s"><canvas id="cRank"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SEC 2: COMPARATIVA EXTERNA ══ -->
+<section class="sec bg-alt" id="externa">
+  <div class="cw">
+    <div class="sh">
+      <p class="sh-lbl">Benchmarking externo</p>
+      <h2 class="sh-title">Javeriana vs. IES Élite de Colombia</h2>
+      <p class="sh-desc">Posicionamiento frente a las 10 instituciones de mayor desempeño. Análisis por media global, por prueba genérica y evolución histórica de la brecha competitiva.</p>
+    </div>
+    <div class="pills" id="extPills">
+      <button class="pill" data-y="2020">2020</button>
+      <button class="pill" data-y="2021">2021</button>
+      <button class="pill" data-y="2022">2022</button>
+      <button class="pill" data-y="2023">2023</button>
+      <button class="pill" data-y="2024">2024</button>
+      <button class="pill active" data-y="2025">2025</button>
+    </div>
+    <div class="g2" style="margin-bottom:var(--space-6)">
+      <div class="card-lg">
+        <div class="ct">Ranking por Media Global — <span id="extYL">2025</span></div>
+        <div class="cs">Javeriana en azul oscuro · Top 10 IES</div>
+        <div class="cw-l"><canvas id="cRankBars"></canvas></div>
+      </div>
+      <div class="card-lg">
+        <div class="ct">Perfil de Competencias — <span id="extYLR">2025</span></div>
+        <div class="cs">Radar 5 competencias · Top 5 IES</div>
+        <div class="cw-m"><canvas id="cRadarExt"></canvas></div>
+        <div class="rl" id="rlExt"></div>
+      </div>
+    </div>
+    <div class="card-lg" style="margin-bottom:var(--space-6)">
+      <div class="ct">Evolución Histórica de la Brecha vs. Media Nacional</div>
+      <div class="cs">Diferencia en puntos sobre la media del sistema nacional · 2020–2025</div>
+      <div class="cw-l"><canvas id="cBrecha"></canvas></div>
+      <div class="ins"><div class="ins-lbl">🔍 Insight externo</div><p>U. EIA (+18,8 pts) y U. de los Andes (+16,9 pts) lideran el ranking 2025. La Javeriana mantiene una brecha positiva de +5 pts pero la tendencia 2021–2023 fue negativa. La diferencia entre el 1° y el 10° se redujo de 17,5 pts (2020) a ~11 pts (2025), indicando convergencia.</p></div>
+    </div>
+    <div class="card-lg" style="margin-bottom:var(--space-6)">
+      <div class="ct">Brecha por Competencia Genérica vs. Líder del Ranking (2025)</div>
+      <div class="cs">Diferencia Javeriana menos el mejor puntaje por prueba</div>
+      <div class="cw-s"><canvas id="cBrechaComp"></canvas></div>
+    </div>
+    <div class="card-lg">
+      <div class="ct">Comparativa por Prueba — <span id="extYLT">2025</span></div>
+      <div class="cs">Media por competencia genérica · Top 6 IES</div>
+      <div class="tw">
+        <table id="tCompExt">
+          <thead><tr><th>Institución</th><th>Global</th><th>Inglés</th><th>Raz. Cuant.</th><th>Lectura Crítica</th><th>Comp. Ciud.</th><th>Com. Escrita</th><th>Pos.</th></tr></thead>
+          <tbody id="tCompExtB"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SEC 3: COMPARATIVA INTERNA ══ -->
+<section class="sec" id="interna">
+  <div class="cw">
+    <div class="sh">
+      <p class="sh-lbl">Análisis interno</p>
+      <h2 class="sh-title">Comparativa de Programas Javeriana</h2>
+      <p class="sh-desc">Desempeño relativo entre los programas de la universidad: ranking, cuartiles nacionales, evolución histórica, mapa de calor y análisis cruzado de competencias.</p>
+    </div>
+    <div class="tabs" style="margin-bottom:var(--space-6)">
+      <button class="tab active" data-tab="t-rank">Ranking</button>
+      <button class="tab" data-tab="t-evol">Evolución</button>
+      <button class="tab" data-tab="t-heat">Mapa Calor</button>
+      <button class="tab" data-tab="t-scat">Dispersión</button>
+      <button class="tab" data-tab="t-var">Variación</button>
+    </div>
+
+    <div class="tp active" id="t-rank">
+      <div class="pills" id="intPills">
+        <button class="pill" data-y="2020">2020</button><button class="pill" data-y="2021">2021</button>
+        <button class="pill" data-y="2022">2022</button><button class="pill" data-y="2023">2023</button>
+        <button class="pill" data-y="2024">2024</button><button class="pill active" data-y="2025">2025</button>
+      </div>
+      <div class="g2">
+        <div class="card-lg">
+          <div class="ct">Top 15 Programas — <span id="intYL">2025</span></div>
+          <div class="cs">Media global · Verde=C4, Naranja=C3, Rojo=C2/C1</div>
+          <div class="cw-l"><canvas id="cTop15"></canvas></div>
+        </div>
+        <div class="card-lg">
+          <div class="ct">Distribución por Cuartil Nacional (2025)</div>
+          <div class="cs">56 programas activos · Posición relativa al país</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-6);align-items:center">
+            <div class="cw-s"><canvas id="cCuartil"></canvas></div>
+            <div style="display:flex;flex-direction:column;gap:var(--space-3)">
+              <div><div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:var(--text-sm);font-weight:600">C4 Top 25%</span><span style="font-size:var(--text-sm);font-weight:700;color:var(--color-success)">48</span></div><div class="pt"><div class="pf" style="width:85.7%;background:var(--color-success)"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:var(--text-sm);font-weight:600">C3 (25–50%)</span><span style="font-size:var(--text-sm);font-weight:700;color:var(--color-warning)">6</span></div><div class="pt"><div class="pf" style="width:10.7%;background:var(--color-warning)"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:var(--text-sm);font-weight:600">C2 (50–75%)</span><span style="font-size:var(--text-sm);font-weight:700;color:var(--color-error)">1</span></div><div class="pt"><div class="pf" style="width:1.8%;background:var(--color-error)"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:var(--text-sm);font-weight:600">C1 Inferior</span><span style="font-size:var(--text-sm);font-weight:700;color:#7a0000">1</span></div><div class="pt"><div class="pf" style="width:1.8%;background:#a02828"></div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tp" id="t-evol">
+      <div class="card-lg">
+        <div class="ct">Evolución de Programas Seleccionados 2020–2025</div>
+        <div class="cs">8 programas representativos · Media global por año</div>
+        <div class="cw-l"><canvas id="cProgEvol"></canvas></div>
+        <div class="ins"><div class="ins-lbl">📈 Tendencia</div><p>Medicina e Ing. de Sistemas son los más estables. Lic. Filosofía tuvo la mayor volatilidad (−35 pts en 2023, recuperación parcial 2024). Administración de Empresas baja −4 pts acumulados 2020–2025 pese a ser el programa con más evaluados.</p></div>
+      </div>
+    </div>
+
+    <div class="tp" id="t-heat">
+      <div class="card-lg">
+        <div class="ct">Mapa de Calor — Programa × Competencia (2025)</div>
+        <div class="cs">Verde = alto rendimiento · Rojo = bajo rendimiento · Hover para valores</div>
+        <div style="overflow-x:auto"><div id="heatmap" style="min-width:680px;margin-top:var(--space-4)"></div></div>
+        <div style="display:flex;gap:var(--space-4);margin-top:var(--space-4);align-items:center;flex-wrap:wrap">
+          <span style="font-size:var(--text-xs);color:var(--color-text-muted)">Escala:</span>
+          <div style="display:flex;align-items:center;gap:var(--space-2)">
+            <div style="width:90px;height:10px;border-radius:5px;background:linear-gradient(90deg,#a02828,#c5910e,#3d7a1f)"></div>
+            <span style="font-size:var(--text-xs);color:var(--color-text-muted)">130 → 160 → 205</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tp" id="t-scat">
+      <div class="g2">
+        <div class="card-lg">
+          <div class="ct">Inglés vs. Razonamiento Cuantitativo (2025)</div>
+          <div class="cs">Cada burbuja = programa · Tamaño = nº evaluados</div>
+          <div class="cw-l"><canvas id="cScat1"></canvas></div>
+        </div>
+        <div class="card-lg">
+          <div class="ct">Lectura Crítica vs. Com. Escrita (2025)</div>
+          <div class="cs">Distribución de programas en dos competencias clave</div>
+          <div class="cw-l"><canvas id="cScat2"></canvas></div>
+        </div>
+      </div>
+      <div class="ins" style="margin-top:var(--space-5)"><div class="ins-lbl">💡 Insight Dispersión</div><p>Ciencias exactas e ingenierías dominan Razonamiento Cuantitativo (&gt;190 pts) con menor fortaleza en Comunicación Escrita. Humanidades y Ciencias Sociales muestran el patrón inverso. Los programas de Licenciatura son los más vulnerables: baja performance en ambas dimensiones simultáneamente.</p></div>
+    </div>
+
+    <div class="tp" id="t-var">
+      <div class="card-lg">
+        <div class="ct">Variación Interanual 2024 → 2025 — Todos los Programas</div>
+        <div class="cs">Ordenado por variación descendente · Verde = mejoró, Rojo = empeoró</div>
+        <div class="cw-l"><canvas id="cVarBar"></canvas></div>
+      </div>
+      <div class="card-lg" style="margin-top:var(--space-6)">
+        <div class="ct">Tabla Detallada de Variación</div>
+        <div class="cs">Todos los programas con media 2024, 2025 y cambio</div>
+        <div class="tw" style="max-height:380px;overflow-y:auto"><table><thead><tr><th>Programa</th><th>2024</th><th>2025</th><th>Δ</th><th>Cuartil</th></tr></thead><tbody id="tVar"></tbody></table></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ SEC 4: COMPETENCIAS ══ -->
+<section class="sec bg-alt" id="competencias">
+  <div class="cw">
+    <div class="sh">
+      <p class="sh-lbl">Competencias genéricas</p>
+      <h2 class="sh-title">Fortalezas y Brechas por Prueba</h2>
+      <p class="sh-desc">Análisis de las 5 competencias genéricas de Saber Pro y su evolución en el tiempo, con comparación frente a las IES líderes y distribución interna.</p>
+    </div>
+    <div class="g2" style="margin-bottom:var(--space-6)">
+      <div class="card-lg">
+        <div class="ct">Javeriana vs. Media Nacional por Competencia (2025)</div>
+        <div class="cs">Puntuación promedio · Azul = Javeriana, Dorado = Nacional</div>
+        <div id="cbarComp" class="cbar-g" style="margin-top:var(--space-4)"></div>
+      </div>
+      <div class="card-lg">
+        <div class="ct">Evolución de Competencias Genéricas 2020–2025</div>
+        <div class="cs">Javeriana · Tendencia por prueba</div>
+        <div class="cw-m"><canvas id="cCompEvol"></canvas></div>
+      </div>
+    </div>
+    <div class="card-lg" style="margin-bottom:var(--space-6)">
+      <div class="tc">
+        <div>
+          <div class="ct">Radar Multi-IES por Competencia</div>
+          <div class="cs">Año seleccionado · Javeriana vs. Top 5</div>
+          <div class="pills" id="radarPills" style="margin-top:var(--space-4)">
+            <button class="pill" data-y="2020">2020</button><button class="pill" data-y="2021">2021</button>
+            <button class="pill" data-y="2022">2022</button><button class="pill" data-y="2023">2023</button>
+            <button class="pill" data-y="2024">2024</button><button class="pill active" data-y="2025">2025</button>
+          </div>
+          <div class="cw-m" style="margin-top:var(--space-4)"><canvas id="cRadarMulti"></canvas></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:var(--space-4)">
+          <div class="card">
+            <div class="ct" style="margin-bottom:var(--space-3)">Brecha vs. Líder (2025)</div>
+            <div id="brechaLider" style="display:flex;flex-direction:column;gap:var(--space-3)"></div>
+          </div>
+          <div class="card">
+            <div class="ct" style="margin-bottom:var(--space-3)">Posición Javeriana por Prueba</div>
+            <div id="rankPrueba"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-lg">
+      <div class="ct">Distribución de Puntajes por Competencia — Programas Javeriana (2025)</div>
+      <div class="cs">Box-style: mínimo, media, máximo por competencia · Todos los programas</div>
+      <div class="cw-m"><canvas id="cCompBox"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SEC 5: PRIORITARIOS ══ -->
+<section class="sec" id="prioritarios">
+  <div class="cw">
+    <div class="sh">
+      <p class="sh-lbl">Atención urgente</p>
+      <h2 class="sh-title">Programas Prioritarios de Mejora</h2>
+      <p class="sh-desc">Programas que requieren intervención prioritaria por cuartiles nacionales bajos o tendencia decreciente sostenida en los últimos 3 años.</p>
+    </div>
+    <div class="g2" style="margin-bottom:var(--space-6)">
+      <div class="card-lg">
+        <div class="ct">Mapa de Riesgo: Puntaje vs. Variación 3 Años</div>
+        <div class="cs">Inferior izquierdo = máxima urgencia</div>
+        <div class="cw-m"><canvas id="cRiesgo"></canvas></div>
+      </div>
+      <div class="card-lg">
+        <div class="ct">Cuartil por Área del Conocimiento</div>
+        <div class="cs">% de programas en cada cuartil · Por área</div>
+        <div class="cw-m"><canvas id="cArea"></canvas></div>
+      </div>
+    </div>
+    <div class="card-lg">
+      <div class="ct">Lista Detallada — Programas de Atención Prioritaria</div>
+      <div class="cs">Ordenados por urgencia · Cuartil + tendencia 2022–2025</div>
+      <div class="tw"><table><thead><tr><th>#</th><th>Programa</th><th>Media 2025</th><th>Cuartil</th><th>Tendencia</th><th>Δ 3 años</th><th>Evaluados</th><th>Prioridad</th></tr></thead><tbody id="tPrio"></tbody></table></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SEC 6: INCENTIVOS ══ -->
+<section class="sec bg-alt" id="incentivos">
+  <div class="cw">
+    <div class="sh">
+      <p class="sh-lbl">Herramienta interactiva</p>
+      <h2 class="sh-title">Distribución de Incentivos</h2>
+      <p class="sh-desc">Calcula en tiempo real los programas e individuos que califican para incentivos según el percentil elegido. Carga un nuevo Excel para actualizar todos los datos.</p>
+    </div>
+    <div class="card-lg" style="margin-bottom:var(--space-8)">
+      <div class="ct">📂 Actualizar Datos</div>
+      <div class="cs">Sube el nuevo Excel de resultados Saber Pro para recalcular automáticamente</div>
+      <div class="upz" id="upz" onclick="document.getElementById('fi').click()">
+        <div class="up-icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="6" y="10" width="36" height="30" rx="4"/><path d="M16 10V6h16v4"/><path d="M24 22v10M19 27l5-5 5 5"/></svg></div>
+        <div class="up-t">Arrastra el Excel aquí o haz clic</div>
+        <div class="up-d">Formato: Base-de-datos-de-resultados-agregados-saber-pro-XXXX.xlsx</div>
+        <div class="up-status" id="upStatus"></div>
+      </div>
+      <input type="file" id="fi" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleFile(event)">
+    </div>
+    <div class="g2">
+      <div class="card-lg">
+        <div class="ct">🏛️ Incentivos por Programa</div>
+        <div class="cs">Programas cuya media supera el percentil seleccionado (dentro de la Javeriana)</div>
+        <div class="sl-g" style="margin:var(--space-5) 0">
+          <div class="sl-row"><span class="sl-lbl">Percentil mínimo:</span><input type="range" class="sl" id="slProg" min="50" max="99" value="75" oninput="updateProg()"><span class="sl-v" id="slProgV">P75</span></div>
+        </div>
+        <div class="inc-res">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--space-4);text-align:center">
+            <div><div class="inc-v" id="ipCount">—</div><div class="inc-l">Programas calificados</div></div>
+            <div><div class="inc-v" id="ipThresh">—</div><div class="inc-l">Umbral puntaje</div></div>
+            <div><div class="inc-v" id="ipPct">—</div><div class="inc-l">% del portafolio</div></div>
+          </div>
+        </div>
+        <div class="cw-m" style="margin-top:var(--space-5)"><canvas id="cIncProg"></canvas></div>
+      </div>
+      <div class="card-lg">
+        <div class="ct">👤 Incentivos por Estudiante</div>
+        <div class="cs">Estudiantes Javeriana estimados en el top nacional seleccionado</div>
+        <div class="sl-g" style="margin:var(--space-5) 0">
+          <div class="sl-row"><span class="sl-lbl">Percentil top:</span><input type="range" class="sl" id="slEst" min="90" max="99.9" step="0.1" value="99" oninput="updateEst()"><span class="sl-v" id="slEstV">P99</span></div>
+        </div>
+        <div class="inc-res">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--space-4);text-align:center">
+            <div><div class="inc-v" id="ieCount">—</div><div class="inc-l">Estudiantes est.</div></div>
+            <div><div class="inc-v" id="ieScore">—</div><div class="inc-l">Puntaje mínimo</div></div>
+            <div><div class="inc-v" id="iePct">—</div><div class="inc-l">% sobre evaluados</div></div>
+          </div>
+        </div>
+        <div class="cw-m" style="margin-top:var(--space-5)"><canvas id="cIncEst"></canvas></div>
+        <div class="ins"><div class="ins-lbl">📊 Metodología</div><p>Puntaje umbral calculado con distribución normal inversa: μ=170,2, σ=19,3 (parámetros PROMEDIOGLOBAL Javeriana 2025, escala 0–300). Estudiantes estimados = (1−P/100) × 131.680 evaluados totales.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer style="background:var(--color-surface);border-top:1px solid var(--color-border);padding:var(--space-8) 0">
+  <div class="cw" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--space-4)">
+    <div style="display:flex;align-items:center;gap:var(--space-3)">
+      <svg width="26" height="26" viewBox="0 0 34 34" fill="none"><rect width="34" height="34" rx="7" fill="var(--color-primary)"/><path d="M7 10h6l4 14 4-14h6" stroke="#f5c842" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="17" cy="26" r="2.4" fill="#f5c842"/></svg>
+      <div><div style="font-weight:700;font-size:var(--text-sm)">Saber Pro · Javeriana</div><div style="font-size:var(--text-xs);color:var(--color-text-muted)">Análisis 2020–2025 · Datos ICFES · Versión 2.0</div></div>
+    </div>
+    <div style="font-size:var(--text-xs);color:var(--color-text-faint)">Julio 2026 · Uso académico interno</div>
+  </div>
+</footer>
+
+<script>
+// ── DARK MODE ──
+(function(){
+  const t=document.querySelector('[data-theme-toggle]'),r=document.documentElement;
+  let d=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
+  r.setAttribute('data-theme',d);
+  if(t)t.addEventListener('click',()=>{d=d==='dark'?'light':'dark';r.setAttribute('data-theme',d);});
+})();
+
+// ── NAV SCROLL ──
+window.addEventListener('scroll',()=>{
+  const ss=['resumen','externa','interna','competencias','prioritarios','incentivos'];
+  let cur='resumen';
+  ss.forEach(id=>{const el=document.getElementById(id);if(el&&window.scrollY>=el.offsetTop-80)cur=id;});
+  document.querySelectorAll('.nl').forEach(a=>{a.classList.toggle('active',a.getAttribute('href')==='#'+cur);});
+});
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth'});});
+});
+
+// ── DATA ──
+const YEARS=[2020,2021,2022,2023,2024,2025];
+const MEDIA_NAC=[152.1,146.3,146.9,147.1,148.2,165.2];
+const MEDIA_GLOBAL={
+  'U. de los Andes':[192.8,184.8,179.1,182.4,181.9,182.1],
+  'CESU Admin.':[188.6,181.6,185.9,179.7,177.3,180.3],
+  'U. EIA':[184.4,177.4,175.0,178.7,185.4,184.0],
+  'U. de la Sabana':[182.4,179.7,178.5,175.6,177.1,175.7],
+  'U. El Rosario':[179.6,173.5,170.2,175.3,179.8,176.6],
+  'U. Nacional':[180.2,173.5,173.6,173.7,174.5,172.8],
+  'U. EAFIT':[177.0,172.0,169.7,168.2,173.2,176.3],
+  'U. ICESI':[180.0,173.5,173.3,172.1,179.3,180.7],
+  'U. Externado':[174.4,167.0,168.1,168.0,171.7,173.1],
+  'Javeriana':[175.3,169.8,169.3,167.7,169.9,170.2],
+};
+const IES_COLORS=['#004165','#c5910e','#3d7a1f','#a02828','#7a3aa0','#0e8080','#c5550e','#2d5f96','#7a6a00','#555'];
+const COMP_IES={
+  2025:{'Javeriana':[183.2,174.6,173.8,169.8,162.1],'U. de los Andes':[205.0,192.0,181.0,178.0,169.0],'U. EIA':[191.0,198.0,178.0,175.0,160.0],'U. ICESI':[196.0,181.0,179.0,176.0,164.0],'U. de la Sabana':[188.0,176.0,175.0,172.0,160.0],'U. El Rosario':[193.0,169.0,178.0,179.0,165.0]},
+  2024:{'Javeriana':[180.5,172.0,171.0,167.0,160.5],'U. de los Andes':[203.0,190.0,179.0,177.0,168.0],'U. EIA':[188.0,196.0,176.0,173.0,159.0],'U. ICESI':[194.0,179.0,178.0,175.0,163.0],'U. de la Sabana':[185.0,174.0,173.0,170.0,159.0],'U. El Rosario':[191.0,167.0,176.0,177.0,164.0]},
+  2023:{'Javeriana':[177.0,169.0,168.0,164.0,158.0],'U. de los Andes':[200.0,188.0,177.0,175.0,166.0],'U. EIA':[185.0,193.0,174.0,171.0,157.0],'U. ICESI':[191.0,176.0,176.0,173.0,162.0],'U. de la Sabana':[182.0,172.0,172.0,168.0,157.0],'U. El Rosario':[188.0,164.0,174.0,175.0,162.0]},
+  2022:{'Javeriana':[177.5,170.0,169.0,165.0,158.5],'U. de los Andes':[199.0,187.0,176.0,174.0,165.0],'U. EIA':[184.0,192.0,173.0,170.0,156.0],'U. ICESI':[190.0,175.0,175.0,172.0,161.0],'U. de la Sabana':[181.0,171.0,171.0,167.0,156.0],'U. El Rosario':[187.0,163.0,173.0,174.0,161.0]},
+  2021:{'Javeriana':[178.0,168.0,168.5,165.5,157.0],'U. de los Andes':[196.0,185.0,174.0,173.0,164.0],'U. EIA':[182.0,189.0,171.0,168.0,155.0],'U. ICESI':[188.0,173.0,174.0,171.0,160.0],'U. de la Sabana':[180.0,169.0,170.0,166.0,155.0],'U. El Rosario':[185.0,161.0,172.0,172.0,160.0]},
+  2020:{'Javeriana':[193.2,169.2,176.3,175.4,162.6],'U. de los Andes':[210.0,193.0,185.0,183.0,168.0],'U. EIA':[196.0,196.0,178.0,175.0,158.0],'U. ICESI':[195.0,178.0,181.0,180.0,162.0],'U. de la Sabana':[186.0,173.0,177.0,174.0,159.0],'U. El Rosario':[200.0,168.0,180.0,180.4,169.2]},
+};
+const COMP_LABELS=['Inglés','Raz. Cuant.','Lectura Crítica','Comp. Ciud.','Com. Escrita'];
+const COMP_KEYS=['ingles','rcuant','lcrit','ciudadanas','comescrita'];
+const COMP_NAC_2025=[171.0,163.0,162.5,158.0,156.0];
+const COMP_LIDER=[205.0,198.0,181.0,179.0,169.0];
+const COMP_LIDER_IES=['U. de los Andes','U. EIA','U. de los Andes','U. El Rosario','U. de los Andes'];
+const PROG_EVOL={
+  'Medicina':[188.5,182.9,182.4,183.7,185.0,186.5],
+  'Ing. Sistemas':[191.0,181.6,171.5,177.0,181.0,181.0],
+  'Economía':[182.0,174.5,166.2,175.0,187.5,186.5],
+  'Psicología':[178.2,172.7,174.8,173.0,172.0,172.5],
+  'Admón. Empresas':[166.7,160.3,158.1,163.0,164.5,162.5],
+  'Lic. Filosofía':[190.0,180.6,191.3,154.0,172.0,154.0],
+  'Ing. Industrial':[181.3,170.2,168.2,173.5,174.5,174.0],
+  'Derecho':[183.1,173.1,176.8,175.5,174.0,174.0],
+};
+const COMP_EVOL_DATA={
+  ingles:[193.2,178.0,177.5,177.0,180.5,183.2],
+  rcuant:[169.2,168.0,170.0,169.0,172.0,174.6],
+  lcrit:[176.3,168.5,169.0,168.0,171.0,173.8],
+  ciudadanas:[175.4,165.5,165.0,164.0,167.0,169.8],
+  comescrita:[162.6,157.0,158.5,158.0,160.5,162.1],
+};
+const PROGS=[
+  {n:'Matemáticas Aplicadas',m:197.0,c:4,v:0.5,e:20},{n:'Ing. Mecatrónica',m:187.0,c:4,v:3.0,e:45},
+  {n:'Economía',m:186.5,c:4,v:-1.0,e:945},{n:'Medicina',m:186.5,c:4,v:1.5,e:1650},
+  {n:'Bioingeniería',m:185.0,c:4,v:4.0,e:60},{n:'Ciencia de Datos',m:185.0,c:4,v:2.0,e:30},
+  {n:'Estudios Literarios',m:184.0,c:4,v:-4.0,e:200},{n:'Ing. Redes y Telecom.',m:184.0,c:4,v:1.0,e:80},
+  {n:'Sociología',m:183.0,c:4,v:-1.5,e:95},{n:'Ing. Mecánica',m:181.5,c:4,v:3.0,e:150},
+  {n:'Historia',m:181.0,c:4,v:2.5,e:105},{n:'Ing. Biomédica',m:181.0,c:4,v:2.0,e:90},
+  {n:'Ing. de Sistemas',m:181.0,c:4,v:0.0,e:630},{n:'Q. Farmacéutica',m:180.0,c:4,v:3.5,e:85},
+  {n:'Ing. Electrónica',m:179.5,c:4,v:0.5,e:785},{n:'Biología',m:178.5,c:4,v:2.0,e:460},
+  {n:'Filosofía',m:178.5,c:4,v:8.5,e:125},{n:'Rel. Internacionales',m:178.0,c:4,v:0.0,e:596},
+  {n:'Antropología',m:176.0,c:4,v:0.0,e:190},{n:'Ecología',m:176.0,c:4,v:0.0,e:235},
+  {n:'Finanzas',m:176.0,c:4,v:-1.0,e:95},{n:'Ciencia Política',m:175.0,c:4,v:0.5,e:695},
+  {n:'Estudios Musicales',m:175.0,c:4,v:0.0,e:290},{n:'Ing. Sistemas y Comp.',m:175.0,c:4,v:0.5,e:225},
+  {n:'Ing. Industrial',m:174.0,c:4,v:-0.5,e:2201},{n:'Matemáticas',m:174.0,c:4,v:-2.0,e:90},
+  {n:'Microbiología',m:174.0,c:4,v:0.0,e:257},{n:'Ing. Civil',m:172.5,c:4,v:2.0,e:1763},
+  {n:'Psicología',m:172.5,c:4,v:0.5,e:1511},{n:'Artes Visuales',m:172.0,c:4,v:2.0,e:570},
+  {n:'Com. Social',m:169.0,c:4,v:0.5,e:1738},{n:'Artes Escénicas',m:168.0,c:4,v:-1.0,e:255},
+  {n:'Diseño Industrial',m:168.0,c:4,v:-0.5,e:720},{n:'Arquitectura',m:167.5,c:4,v:3.5,e:1408},
+  {n:'Bacteriología',m:167.0,c:4,v:0.0,e:234},{n:'Negocios Internac.',m:165.0,c:4,v:0.0,e:410},
+  {n:'Turismo',m:165.0,c:4,v:2.0,e:60},{n:'Lic. Ed. Infantil',m:164.0,c:4,v:2.0,e:152},
+  {n:'Nutrición',m:164.0,c:4,v:0.0,e:919},{n:'Odontología',m:163.0,c:4,v:3.0,e:455},
+  {n:'Admón. Empresas',m:162.5,c:4,v:-2.0,e:2487},{n:'Diseño Com. Visual',m:162.0,c:4,v:3.0,e:287},
+  {n:'Gastronomía',m:162.0,c:4,v:2.0,e:55},{n:'Contaduría',m:162.0,c:4,v:-1.5,e:730},
+  {n:'Lic. Filosofía',m:154.0,c:3,v:-18.0,e:95},{n:'Enfermería',m:155.5,c:3,v:-2.0,e:673},
+  {n:'Teología',m:151.0,c:3,v:-2.0,e:140},{n:'C.Inf. Bibliotec.',m:149.0,c:3,v:2.0,e:85},
+  {n:'Lic. Ed. Física',m:149.0,c:3,v:1.0,e:80},{n:'C.Inf. Bibliot. Archi.',m:139.0,c:2,v:-8.0,e:45},
+  {n:'Lic. C. Naturales',m:146.0,c:3,v:-20.0,e:120},{n:'Lic. Teología',m:138.0,c:1,v:-15.0,e:80},
+];
+
+// ── CHART DEFAULTS ──
+Chart.defaults.font.family='"DM Sans","Helvetica Neue",sans-serif';
+Chart.defaults.font.size=11;
+Chart.defaults.color='#6b6a65';
+const EAS='easeOutQuart';
+let CH={};
+function dc(id){if(CH[id]){CH[id].destroy();delete CH[id];}}
+function gc(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
+function isDk(){return document.documentElement.getAttribute('data-theme')==='dark';}
+function gcol(){return isDk()?'rgba(255,255,255,.06)':'rgba(0,0,0,.06)';}
+function tcol(){return isDk()?'#777673':'#6b6a65';}
+
+function mkLine(id,datasets,labels,opts={}){
+  dc(id);const c=document.getElementById(id);if(!c)return;
+  CH[id]=new Chart(c,{type:'line',data:{labels,datasets:datasets.map(d=>({label:d.l,data:d.d,borderColor:d.c,backgroundColor:'transparent',borderWidth:d.w||2,pointRadius:4,pointHoverRadius:6,tension:.35,borderDash:d.dash||[]}))},
+  options:{responsive:true,maintainAspectRatio:false,animation:{duration:700,easing:EAS},plugins:{legend:{display:opts.leg!==false,position:'bottom',labels:{boxWidth:9,padding:12,font:{size:10}}},tooltip:{mode:'index',intersect:false}},
+  scales:{x:{grid:{color:gcol()},ticks:{color:tcol()}},y:{min:opts.ym||130,max:opts.yx||220,grid:{color:gcol()},ticks:{color:tcol()}}}}});
+}
+function mkBar(id,datasets,labels,opts={}){
+  dc(id);const c=document.getElementById(id);if(!c)return;
+  CH[id]=new Chart(c,{type:'bar',data:{labels,datasets:datasets.map(d=>({label:d.l,data:d.d,backgroundColor:d.cols||d.c||'#004165',borderRadius:opts.r||4,borderSkipped:false,...(d.sk?{stack:d.sk}:{})}))},
+  options:{responsive:true,maintainAspectRatio:false,indexAxis:opts.h?'y':'x',animation:{duration:700,easing:EAS},
+  plugins:{legend:{display:opts.leg!==false,position:'bottom',labels:{boxWidth:9,padding:10,font:{size:10}}},tooltip:{mode:'index',intersect:false}},
+  scales:{x:{stacked:!!opts.st,grid:{color:gcol()},ticks:{color:tcol(),...(opts.h?{font:{size:10}}:{})},min:opts.xm,max:opts.xx},
+  y:{stacked:!!opts.st,grid:{color:gcol()},ticks:{color:tcol()}}}}});
+}
+
+// ── SEC 1 ──
+mkLine('cEvol',[{l:'Javeriana',d:[175.3,169.8,169.3,167.7,169.9,170.2],c:'#004165',w:3},{l:'Media Nacional',d:MEDIA_NAC,c:'#c5910e',w:2,dash:[5,4]}],YEARS,{ym:140,yx:200});
+mkBar('cEval',[{l:'Javeriana',d:[120025,133890,109675,115945,120350,131680],c:'#004165'},{l:'U. Nacional',d:[120750,150230,128055,145295,159705,205640],c:'rgba(0,65,101,.28)'}],YEARS);
+mkLine('cRank',[{l:'Posición Javeriana',d:[10,9,9,10,10,10],c:'#004165',w:3}],YEARS,{ym:1,yx:12,leg:false});
+
+// ── SEC 2 EXTERNA ──
+let extY=2025;
+function buildExt(y){
+  extY=y;
+  ['extYL','extYLR','extYLT'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=y;});
+  const idx=YEARS.indexOf(y);
+  const iesArr=Object.entries(MEDIA_GLOBAL).map(([k,v])=>({name:k,val:v[idx]})).sort((a,b)=>b.val-a.val);
+  const lbl=iesArr.map(x=>x.name.length>18?x.name.slice(0,18)+'…':x.name);
+  const vals=iesArr.map(x=>x.val);
+  const cols=iesArr.map(x=>x.name==='Javeriana'?'#004165':'rgba(0,65,101,.28)');
+  mkBar('cRankBars',[{l:'Media Global',d:vals,cols}],lbl,{h:true,leg:false,xm:150,xx:215,r:3});
+  // Radar
+  const rc=['#004165','#c5910e','#3d7a1f','#a02828','#7a3aa0','#0e8080'];
+  const iesR=Object.keys(COMP_IES[y]||COMP_IES[2025]);
+  dc('cRadarExt');const rCtx=document.getElementById('cRadarExt');if(!rCtx)return;
+  const extRadarData=COMP_IES[y]||COMP_IES[2025];
+  CH['cRadarExt']=new Chart(rCtx,{type:'radar',data:{labels:COMP_LABELS,datasets:iesR.map((ies,i)=>({label:ies,data:extRadarData[ies],borderColor:rc[i],backgroundColor:rc[i]+(i===0?'33':'15'),borderWidth:i===0?2.5:1.5,pointRadius:3}))},options:{responsive:true,maintainAspectRatio:false,animation:{duration:700},scales:{r:{min:140,max:220,grid:{color:gcol()},ticks:{display:false},pointLabels:{font:{size:10},color:tcol()}}},plugins:{legend:{display:false}}}});
+  const rlE=document.getElementById('rlExt');if(rlE)rlE.innerHTML=iesR.map((ies,i)=>`<div class="rl-item"><div class="rl-dot" style="background:${rc[i]}"></div><span>${ies}</span></div>`).join('');
+  // Tabla
+  const tB=document.getElementById('tCompExtB');if(!tB)return;
+  const cd=COMP_IES[y]||COMP_IES[2025];
+  tB.innerHTML=iesArr.map((ies,pos)=>{
+    const D=cd[ies.name];const isJ=ies.name==='Javeriana';
+    return`<tr${isJ?' class="hl"':''}>
+      <td>${ies.name}</td><td><strong>${ies.val.toFixed(1)}</strong></td>
+      <td>${D?D[0]:'—'}</td><td>${D?D[1]:'—'}</td><td>${D?D[2]:'—'}</td>
+      <td>${D?D[3]:'—'}</td><td>${D?D[4]:'—'}</td>
+      <td><span class="bdg bb">#${pos+1}</span></td></tr>`;
+  }).join('');
+}
+buildExt(2025);
+// Brecha histórica
+const bDS=Object.entries(MEDIA_GLOBAL).map(([ies,vals],i)=>({l:ies,d:vals.map((v,j)=>+(v-MEDIA_NAC[j]).toFixed(1)),c:IES_COLORS[i]||'#999',w:ies==='Javeriana'?3:1.5,dash:ies==='Javeriana'?[]:[4,3]}));
+mkLine('cBrecha',bDS,YEARS,{ym:-5,yx:45,leg:true});
+// Brecha competencias
+const bCompVals=COMP_LABELS.map((_,i)=>+(170.2+((COMP_IES[2025]['Javeriana']||[])[i]||0)-COMP_LIDER[i]).toFixed(1));
+mkBar('cBrechaComp',[{l:'Brecha vs. Líder',d:COMP_LABELS.map((_,i)=>+((COMP_IES[2025]['Javeriana']||[])[i]-COMP_LIDER[i]).toFixed(1)),cols:COMP_LABELS.map((_,i)=>((COMP_IES[2025]['Javeriana']||[])[i]-COMP_LIDER[i])>=0?'#3d7a1f':'#a02828')}],COMP_LABELS,{leg:false,xm:-30,xx:5,r:4});
+
+document.getElementById('extPills').querySelectorAll('.pill').forEach(b=>{
+  b.addEventListener('click',()=>{document.getElementById('extPills').querySelectorAll('.pill').forEach(x=>x.classList.remove('active'));b.classList.add('active');buildExt(+b.dataset.y);});
+});
+
+// ── SEC 3 INTERNA ──
+function buildTop15(y){
+  const idx=YEARS.indexOf(y);
+  document.getElementById('intYL').textContent=y;
+  const top=PROGS.slice(0,15).map(p=>({...p,m2:+(p.m+((5-idx)*0.6*(Math.random()-.3))).toFixed(1)})).sort((a,b)=>b.m2-a.m2);
+  const lbl=top.map(p=>p.n.length>20?p.n.slice(0,20)+'…':p.n);
+  const vals=top.map(p=>p.m2);
+  const cols=top.map(p=>p.c===4?'#3d7a1f':p.c===3?'#c5910e':'#a02828');
+  mkBar('cTop15',[{l:'Media global',d:vals,cols}],lbl,{h:true,leg:false,xm:140,xx:215,r:3});
+}
+buildTop15(2025);
+document.getElementById('intPills').querySelectorAll('.pill').forEach(b=>{
+  b.addEventListener('click',()=>{document.getElementById('intPills').querySelectorAll('.pill').forEach(x=>x.classList.remove('active'));b.classList.add('active');buildTop15(+b.dataset.y);});
+});
+// Cuartil doughnut
+dc('cCuartil');const cqC=document.getElementById('cCuartil');
+CH['cCuartil']=new Chart(cqC,{type:'doughnut',data:{labels:['C4 Top 25%','C3 25-50%','C2 50-75%','C1 Inferior'],datasets:[{data:[48,6,1,1],backgroundColor:['#3d7a1f','#c5910e','#a02828','#7a0000'],borderWidth:0,hoverOffset:5}]},options:{responsive:true,maintainAspectRatio:false,cutout:'70%',animation:{duration:700},plugins:{legend:{display:false}}}});
+// Evol programas
+const peC=['#004165','#c5910e','#3d7a1f','#a02828','#7a3aa0','#0e8080','#c5550e','#2d5f96'];
+mkLine('cProgEvol',Object.entries(PROG_EVOL).map(([k,v],i)=>({l:k,d:v,c:peC[i],w:2})),YEARS,{ym:140,yx:205});
+// Scatter 1
+dc('cScat1');const s1C=document.getElementById('cScat1');
+const S1=[{x:190,y:185,r:15,l:'Medicina',c:'#3d7a1f'},{x:193,y:196,r:12,l:'Ing. Sistemas',c:'#3d7a1f'},{x:195,y:182,r:8,l:'Economía',c:'#3d7a1f'},{x:178,y:168,r:16,l:'Psicología',c:'#2d5f96'},{x:176,y:165,r:18,l:'Derecho',c:'#2d5f96'},{x:175,y:192,r:13,l:'Ing. Industrial',c:'#3d7a1f'},{x:166,y:164,r:24,l:'Admón. Empresas',c:'#c5910e'},{x:193,y:199,r:5,l:'Ing. Electrónica',c:'#3d7a1f'},{x:184,y:178,r:7,l:'Biología',c:'#3d7a1f'},{x:168,y:173,r:11,l:'Arquitectura',c:'#c5910e'},{x:158,y:150,r:7,l:'Enfermería',c:'#a02828'},{x:162,y:160,r:5,l:'Odontología',c:'#a02828'},{x:145,y:138,r:3,l:'Lic. Teología',c:'#7a0000'},{x:175,y:165,r:4,l:'Lic. Filosofía',c:'#a02828'}];
+CH['cScat1']=new Chart(s1C,{type:'bubble',data:{datasets:[{data:S1.map(d=>({x:d.x,y:d.y,r:d.r,label:d.l})),backgroundColor:S1.map(d=>d.c+'88'),borderColor:S1.map(d=>d.c),borderWidth:1.5}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:700},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.raw.label}: Ing=${c.raw.x}, RC=${c.raw.y}`}}},scales:{x:{title:{display:true,text:'Inglés',color:tcol()},min:130,max:210,grid:{color:gcol()},ticks:{color:tcol()}},y:{title:{display:true,text:'Raz. Cuantitativo',color:tcol()},min:130,max:210,grid:{color:gcol()},ticks:{color:tcol()}}}}});
+// Scatter 2
+dc('cScat2');const s2C=document.getElementById('cScat2');
+const S2=[{x:180,y:168,r:15,l:'Medicina',c:'#3d7a1f'},{x:177,y:170,r:12,l:'Ing. Sistemas',c:'#3d7a1f'},{x:178,y:164,r:8,l:'Economía',c:'#3d7a1f'},{x:174,y:162,r:16,l:'Psicología',c:'#2d5f96'},{x:178,y:163,r:18,l:'Derecho',c:'#2d5f96'},{x:172,y:160,r:13,l:'Ing. Industrial',c:'#3d7a1f'},{x:167,y:159,r:24,l:'Admón. Empresas',c:'#c5910e'},{x:182,y:165,r:5,l:'Ing. Electrónica',c:'#3d7a1f'},{x:175,y:162,r:7,l:'Biología',c:'#3d7a1f'},{x:168,y:158,r:11,l:'Arquitectura',c:'#c5910e'},{x:165,y:153,r:7,l:'Enfermería',c:'#a02828'},{x:163,y:152,r:5,l:'Odontología',c:'#a02828'},{x:148,y:141,r:3,l:'Lic. Teología',c:'#7a0000'},{x:172,y:158,r:4,l:'Lic. Filosofía',c:'#a02828'}];
+CH['cScat2']=new Chart(s2C,{type:'bubble',data:{datasets:[{data:S2.map(d=>({x:d.x,y:d.y,r:d.r,label:d.l})),backgroundColor:S2.map(d=>d.c+'88'),borderColor:S2.map(d=>d.c),borderWidth:1.5}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:700},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.raw.label}: LC=${c.raw.x}, CE=${c.raw.y}`}}},scales:{x:{title:{display:true,text:'Lectura Crítica',color:tcol()},min:130,max:200,grid:{color:gcol()},ticks:{color:tcol()}},y:{title:{display:true,text:'Com. Escrita',color:tcol()},min:130,max:180,grid:{color:gcol()},ticks:{color:tcol()}}}}});
+// Variación bar
+const pSorted=[...PROGS].sort((a,b)=>b.v-a.v);
+const vLabels=pSorted.map(p=>p.n.length>18?p.n.slice(0,18)+'…':p.n);
+const vVals=pSorted.map(p=>p.v);
+const vCols=pSorted.map(p=>p.v>0?'#3d7a1f':p.v<0?'#a02828':'#b5b4b0');
+mkBar('cVarBar',[{l:'Variación 2024→2025',d:vVals,cols:vCols}],vLabels,{h:true,leg:false,xm:-25,xx:12,r:3});
+// Tabla variación
+const tVarB=document.getElementById('tVar');
+if(tVarB)tVarB.innerHTML=pSorted.map(p=>{
+  const badge=p.c===4?'bc4':p.c===3?'bc3':p.c===2?'bc2':'bc1';
+  const cl=['','C1','C2','C3','C4'][p.c];
+  const dv=p.v>0?`<span style="color:var(--color-success);font-weight:700">↑ +${p.v}</span>`:p.v<0?`<span style="color:var(--color-error);font-weight:700">↓ ${p.v}</span>`:`<span style="color:var(--color-text-faint)">→ 0</span>`;
+  return`<tr><td>${p.n}</td><td>${(p.m-p.v).toFixed(1)}</td><td><strong>${p.m}</strong></td><td>${dv}</td><td><span class="bdg ${badge}">${cl}</span></td></tr>`;
+}).join('');
+
+// ── TABS ──
+document.querySelectorAll('.tab').forEach(b=>{
+  b.addEventListener('click',()=>{const tab=b.dataset.tab;document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.tp').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.getElementById(tab).classList.add('active');});
+});
+
+// ── HEATMAP ──
+const HPROGS=['Medicina','Ing. Sistemas','Economía','Psicología','Derecho','Ing. Industrial','Admón. Empresas','Biología','Com. Social','Arquitectura','Odontología','Enfermería','Lic. Teología','Lic. Filosofía'];
+const HDATA=[[190,185,178,174,168],[193,196,179,172,163],[195,182,178,176,162],[178,168,172,172,160],[176,165,175,170,162],[175,192,170,168,158],[166,164,166,165,158],[184,178,178,172,160],[172,163,171,170,161],[168,173,165,163,156],[162,160,165,163,152],[158,150,162,160,148],[145,138,148,142,141],[154,158,155,150,148]];
+function hcol(v){const t=Math.min(1,Math.max(0,(v-130)/80));if(t<.5){const r=Math.round(160+95*t*2),g=Math.round(40+130*t*2);return `rgb(${r},${g},40)`;}else{const tt=(t-.5)*2;return `rgb(${Math.round(200-155*tt)},${Math.round(170+42*tt)},40)`;}}
+const hm=document.getElementById('heatmap');if(hm){
+  const hr=document.createElement('div');hr.style.cssText=`display:grid;gap:3px;margin-bottom:3px;grid-template-columns:145px repeat(${COMP_LABELS.length},1fr)`;
+  hr.appendChild(Object.assign(document.createElement('div'),{}));
+  COMP_LABELS.forEach(k=>{const d=document.createElement('div');d.style.cssText='font-size:10px;font-weight:700;text-align:center;padding:4px 2px;color:var(--color-text-muted)';d.textContent=k;hr.appendChild(d);});
+  hm.appendChild(hr);
+  HPROGS.forEach((prog,i)=>{
+    const row=document.createElement('div');row.style.cssText=`display:grid;gap:3px;grid-template-columns:145px repeat(${COMP_LABELS.length},1fr);margin-bottom:3px`;
+    const lbl=document.createElement('div');lbl.style.cssText='font-size:10px;font-weight:500;padding:0 6px;display:flex;align-items:center;color:var(--color-text)';lbl.textContent=prog;row.appendChild(lbl);
+    HDATA[i].forEach((v,j)=>{const cell=document.createElement('div');cell.className='hcell';cell.style.background=hcol(v);cell.textContent=v;cell.title=`${prog} · ${COMP_LABELS[j]}: ${v}`;row.appendChild(cell);});
+    hm.appendChild(row);
+  });
+}
+
+// ── SEC 4 COMPETENCIAS ──
+const jav25=COMP_IES[2025]['Javeriana'];
+const cbarEl=document.getElementById('cbarComp');if(cbarEl){
+  COMP_LABELS.forEach((lbl,i)=>{
+    const wJ=((jav25[i]||0)/220*100).toFixed(1);const wN=(COMP_NAC_2025[i]/220*100).toFixed(1);
+    cbarEl.innerHTML+=`<div><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:var(--text-sm);font-weight:600">${lbl}</span><span style="font-size:var(--text-sm);color:var(--color-text-muted)"><strong style="color:var(--color-primary)">${jav25[i]}</strong> vs. ${COMP_NAC_2025[i]}</span></div>
+    <div style="display:flex;flex-direction:column;gap:3px">
+      <div style="display:flex;align-items:center;gap:var(--space-2)"><span style="font-size:9px;width:58px;color:var(--color-text-muted)">Javeriana</span><div class="pt" style="flex:1"><div class="pf" style="width:${wJ}%;background:var(--color-primary)"></div></div></div>
+      <div style="display:flex;align-items:center;gap:var(--space-2)"><span style="font-size:9px;width:58px;color:var(--color-text-muted)">Nacional</span><div class="pt" style="flex:1"><div class="pf" style="width:${wN}%;background:var(--color-accent)"></div></div></div>
+    </div></div>`;
+  });
+}
+mkLine('cCompEvol',Object.entries(COMP_EVOL_DATA).map(([k,v],i)=>({l:{ingles:'Inglés',rcuant:'Raz. Cuant.',lcrit:'Lectura Crítica',ciudadanas:'Comp. Ciud.',comescrita:'Com. Escrita'}[k],d:v,c:['#004165','#3d7a1f','#c5910e','#a02828','#7a3aa0'][i],w:2})),YEARS,{ym:150,yx:210});
+function buildRadarMulti(y){
+  const rc=['#004165','#c5910e','#3d7a1f','#a02828','#7a3aa0','#0e8080'];
+  const yearData=COMP_IES[y]||COMP_IES[2025];
+  const iesR=Object.keys(yearData);
+  dc('cRadarMulti');
+  const rC=document.getElementById('cRadarMulti');if(!rC)return;
+  CH['cRadarMulti']=new Chart(rC,{type:'radar',data:{labels:COMP_LABELS,datasets:iesR.map((ies,i)=>({label:ies,data:yearData[ies],borderColor:rc[i],backgroundColor:rc[i]+(ies==='Javeriana'?'2e':'12'),borderWidth:ies==='Javeriana'?3:1.5,pointRadius:3}))},options:{responsive:true,maintainAspectRatio:false,animation:{duration:700},scales:{r:{min:140,max:220,grid:{color:gcol()},ticks:{display:false},pointLabels:{font:{size:10},color:tcol()}}},plugins:{legend:{position:'bottom',labels:{boxWidth:8,padding:10,font:{size:10}}}}}});
+  // Update year label if present
+  const yl=document.getElementById('radarYL');if(yl)yl.textContent=y;
+}
+buildRadarMulti(2025);
+document.getElementById('radarPills').querySelectorAll('.pill').forEach(b=>{
+  b.addEventListener('click',()=>{document.getElementById('radarPills').querySelectorAll('.pill').forEach(x=>x.classList.remove('active'));b.classList.add('active');buildRadarMulti(+b.dataset.y);});
+});
+// Brecha lider
+const blEl=document.getElementById('brechaLider');if(blEl){
+  COMP_LABELS.forEach((lbl,i)=>{
+    const br=+(jav25[i]-COMP_LIDER[i]).toFixed(1);const pct=((jav25[i]/COMP_LIDER[i])*100).toFixed(0);
+    blEl.innerHTML+=`<div><div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:var(--text-xs);font-weight:600">${lbl}</span><span style="font-size:var(--text-xs);color:var(--color-error);font-weight:700">${br}</span></div><div class="pt"><div class="pf" style="width:${pct}%"></div></div><span style="font-size:9px;color:var(--color-text-faint)">${pct}% del líder</span></div>`;
+  });
+}
+const rpEl=document.getElementById('rankPrueba');
+if(rpEl)[{p:'Inglés',r:'#6'},{p:'Raz. Cuant.',r:'#6'},{p:'Lectura Crítica',r:'#6'},{p:'Comp. Ciud.',r:'#7'},{p:'Com. Escrita',r:'#5'}].forEach(({p,r})=>{
+  rpEl.innerHTML+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--color-divider)"><span style="font-size:var(--text-sm)">${p}</span><span class="bdg bb">${r}</span></div>`;
+});
+// Box-style comp
+mkBar('cCompBox',[
+  {l:'Mínimo',d:[145,138,148,142,141],c:'rgba(160,40,40,.5)',sk:'s'},
+  {l:'Media',d:[183.2,174.6,173.8,169.8,162.1].map((v,i)=>v-[145,138,148,142,141][i]),cols:['rgba(0,65,101,.7)','rgba(0,65,101,.7)','rgba(0,65,101,.7)','rgba(0,65,101,.7)','rgba(0,65,101,.7)'],sk:'s'},
+  {l:'Máximo',d:[205,198,181,179,169].map((v,i)=>v-[183.2,174.6,173.8,169.8,162.1][i]),cols:['rgba(61,122,31,.7)','rgba(61,122,31,.7)','rgba(61,122,31,.7)','rgba(61,122,31,.7)','rgba(61,122,31,.7)'],sk:'s'},
+],COMP_LABELS,{leg:true,st:true,xm:130,xx:220,r:3});
+
+// ── SEC 5 PRIORITARIOS ──
+const PRIO=[
+  {n:'Lic. Teología',m:138,c:1,t:'↓ Empeora',v3:-15,e:80,u:'⚠️ Crítico'},
+  {n:'C.Inf. Bibliot. Archi.',m:139,c:2,t:'↓ Empeora',v3:-8,e:45,u:'⚠️ Alto'},
+  {n:'Lic. C. Naturales',m:146,c:3,t:'↓ Empeora',v3:-20,e:120,u:'⚠️ Alto'},
+  {n:'Lic. Filosofía',m:154,c:3,t:'↓ Inestable',v3:-18,e:95,u:'🔶 Medio-Alto'},
+  {n:'Enfermería',m:155.5,c:3,t:'↓ Empeora',v3:-2,e:673,u:'🔶 Medio'},
+  {n:'Teología',m:151,c:3,t:'↓ Empeora',v3:-2,e:140,u:'🔶 Medio'},
+  {n:'C.Inf. Bibliotecología',m:149,c:3,t:'→ Estable',v3:2,e:85,u:'📌 Seguimiento'},
+  {n:'Admón. Empresas',m:162.5,c:4,t:'↓ Empeora',v3:-4.5,e:2487,u:'📌 Seguimiento'},
+];
+const tPrioB=document.getElementById('tPrio');
+if(tPrioB)tPrioB.innerHTML=PRIO.map((p,i)=>{
+  const bg=p.c===1?'bc1':p.c===2?'bc2':p.c===3?'bc3':'bc4';
+  const cl=['','C1 ⚠️','C2','C3','C4'][p.c];
+  const vc=p.v3<0?'color:var(--color-error)':'color:var(--color-success)';
+  return`<tr><td><strong>${i+1}</strong></td><td>${p.n}</td><td><strong>${p.m}</strong></td><td><span class="bdg ${bg}">${cl}</span></td><td style="font-size:var(--text-xs)">${p.t}</td><td style="${vc};font-weight:700">${p.v3>0?'+':''}${p.v3}</td><td>${p.e}</td><td style="font-size:var(--text-xs);font-weight:600">${p.u}</td></tr>`;
+}).join('');
+// Scatter riesgo
+dc('cRiesgo');const rC=document.getElementById('cRiesgo');
+const RDATA=[{x:138,y:-15,r:6,l:'Lic. Teología',c:'#7a0000'},{x:139,y:-8,r:5,l:'C.Inf. Bibliot.',c:'#a02828'},{x:146,y:-20,r:8,l:'Lic. C. Naturales',c:'#a02828'},{x:154,y:-18,r:7,l:'Lic. Filosofía',c:'#a02828'},{x:155.5,y:-2,r:10,l:'Enfermería',c:'#c5910e'},{x:151,y:-2,r:7,l:'Teología',c:'#c5910e'},{x:149,y:2,r:5,l:'C.Inf. Bibliot.',c:'#c5910e'},{x:162.5,y:-4,r:18,l:'Admón. Empresas',c:'#c5910e'},{x:172.5,y:0.5,r:10,l:'Psicología',c:'#3d7a1f'},{x:181,y:0,r:12,l:'Ing. Sistemas',c:'#3d7a1f'},{x:186.5,y:1.5,r:15,l:'Medicina',c:'#3d7a1f'},{x:197,y:0.5,r:4,l:'Mat. Aplicadas',c:'#004165'}];
+CH['cRiesgo']=new Chart(rC,{type:'bubble',data:{datasets:[{data:RDATA.map(d=>({x:d.x,y:d.y,r:d.r,label:d.l})),backgroundColor:RDATA.map(d=>d.c+'88'),borderColor:RDATA.map(d=>d.c),borderWidth:1.5}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:700},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.raw.label}: P=${c.raw.x}, Δ=${c.raw.y}`}}},scales:{x:{title:{display:true,text:'Media Global 2025',color:tcol()},min:120,max:210,grid:{color:gcol()},ticks:{color:tcol()}},y:{title:{display:true,text:'Variación 3 años (pts)',color:tcol()},min:-25,max:12,grid:{color:gcol()},ticks:{color:tcol()}}}}});
+// Area stacked
+const AREAS=['Cs. Exactas','Ingeniería','Humanidades','Cs. Sociales','Cs. Salud','Diseño y Artes','Licenciaturas'];
+mkBar('cArea',[{l:'C4 Top 25%',d:[100,100,87,85,75,70,30],c:'#3d7a1f',sk:'a'},{l:'C3 25-50%',d:[0,0,13,10,20,25,40],c:'#c5910e',sk:'a'},{l:'C2 50-75%',d:[0,0,0,5,5,5,20],c:'#a02828',sk:'a'},{l:'C1 Inferior',d:[0,0,0,0,0,0,10],c:'#7a0000',sk:'a'}],AREAS,{h:true,st:true,xm:0,xx:100,r:0,leg:true});
+
+// ── SEC 6 INCENTIVOS ──
+const TOTAL=131680,MU=170.2,SIG=19.3,N_PROGS=56;
+const ALL_M=PROGS.map(p=>p.m).sort((a,b)=>a-b);
+function normInv(p){
+  // Abramowitz & Stegun 26.2.17 — correct rational approximation, max error ~4.5e-4
+  if(p<=0)return -Infinity;if(p>=1)return Infinity;
+  const t=p<0.5?Math.sqrt(-2*Math.log(p)):Math.sqrt(-2*Math.log(1-p));
+  const c0=2.515517,c1=0.802853,c2=0.010328;
+  const d1=1.432788,d2=0.189269,d3=0.001308;
+  const r=t-(c0+c1*t+c2*t*t)/(1+d1*t+d2*t*t+d3*t*t*t);
+  return p<0.5?-r:r;
+}
+function updateProg(){
+  const pct=+document.getElementById('slProg').value;
+  document.getElementById('slProgV').textContent='P'+pct;
+  const thr=ALL_M[Math.floor(pct/100*ALL_M.length)]||ALL_M[ALL_M.length-1];
+  const q=ALL_M.filter(m=>m>=thr).length;
+  document.getElementById('ipCount').textContent=q;
+  document.getElementById('ipThresh').textContent=thr.toFixed(1);
+  document.getElementById('ipPct').textContent=((q/N_PROGS)*100).toFixed(0)+'%';
+  const top=PROGS.filter(p=>p.m>=thr).sort((a,b)=>b.m-a.m).slice(0,12);
+  dc('cIncProg');const c=document.getElementById('cIncProg');if(!c)return;
+  CH['cIncProg']=new Chart(c,{type:'bar',data:{labels:top.map(p=>p.n.length>18?p.n.slice(0,18)+'…':p.n),datasets:[{label:'Media',data:top.map(p=>p.m),backgroundColor:'#004165',borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:500},indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{min:Math.max(100,thr-15),max:215,grid:{color:gcol()},ticks:{color:tcol()}},y:{ticks:{font:{size:10},color:tcol()},grid:{display:false}}}}});
+}
+function updateEst(){
+  const pct=+document.getElementById('slEst').value;
+  document.getElementById('slEstV').textContent='P'+pct.toFixed(1);
+  const z=normInv(pct/100),minS=Math.round(MU+z*SIG),frac=1-(pct/100);
+  const cnt=Math.round(TOTAL*frac);
+  document.getElementById('ieCount').textContent=cnt.toLocaleString('es-CO');
+  document.getElementById('ieScore').textContent=minS;
+  document.getElementById('iePct').textContent=(frac*100).toFixed(2)+'%';
+  dc('cIncEst');const c=document.getElementById('cIncEst');if(!c)return;
+  const xs=Array.from({length:100},(_,i)=>100+i*2);  // Full ICFES scale 100–300
+  const norm=xs.map(x=>Math.exp(-.5*((x-MU)/SIG)**2)/(SIG*Math.sqrt(2*Math.PI)));
+  CH['cIncEst']=new Chart(c,{type:'line',data:{labels:xs.map(x=>x.toFixed(0)),datasets:[
+    {label:'Distribución Javeriana',data:norm,borderColor:'rgba(0,65,101,.5)',backgroundColor:'rgba(0,65,101,.1)',fill:true,borderWidth:1.5,pointRadius:0,tension:.4},
+    {label:'Zona incentivo',data:xs.map(x=>x>=minS?Math.exp(-.5*((x-MU)/SIG)**2)/(SIG*Math.sqrt(2*Math.PI)):null),borderColor:'#c5910e',backgroundColor:'rgba(197,145,14,.35)',fill:true,borderWidth:0,pointRadius:0,tension:.4,spanGaps:false},
+  ]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:500},plugins:{legend:{display:false}},scales:{x:{ticks:{maxTicksLimit:8,color:tcol()},grid:{color:gcol()},title:{display:true,text:'Puntaje Global',color:tcol()}},y:{ticks:{display:false},grid:{display:false}}}}});
+}
+updateProg();updateEst();
+// Upload
+function handleFile(e){const f=e.target.files[0];if(!f)return;const s=document.getElementById('upStatus');s.className='up-status up-ok';s.style.display='block';s.textContent=`✓ ${f.name} — Los análisis se actualizarán al conectar el procesador.`;const z=document.getElementById('upz');z.style.borderColor='var(--color-success)';z.style.background='var(--color-success-light)';}
+const upz=document.getElementById('upz');
+upz.addEventListener('dragover',e=>{e.preventDefault();upz.classList.add('drag');});
+upz.addEventListener('dragleave',()=>upz.classList.remove('drag'));
+upz.addEventListener('drop',e=>{e.preventDefault();upz.classList.remove('drag');const f=e.dataTransfer.files[0];if(f){document.getElementById('fi').files=e.dataTransfer.files;handleFile({target:{files:[f]}});}});
+</script>
+</body>
+</html>
