@@ -1,0 +1,1714 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saber Pro 2020-2025 · Javeriana</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300..700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+<style>
+/* === BASE TOKENS === */
+:root,[data-theme="light"]{
+  --color-bg:#f7f6f2;--color-surface:#f9f8f5;--color-surface-2:#fbfbf9;
+  --color-surface-offset:#f0ede8;--color-surface-dynamic:#e8e5e0;
+  --color-divider:#dcd9d5;--color-border:#d4d1ca;
+  --color-text:#28251d;--color-text-muted:#7a7974;--color-text-faint:#bab9b4;
+  --color-primary:#01696f;--color-primary-hover:#0c4e54;
+  --color-primary-highlight:#cedcd8;
+  --color-success:#437a22;--color-error:#a12c7b;
+  --color-warning:#964219;--color-blue:#006494;
+  --color-orange:#da7101;--color-gold:#d19900;
+  --shadow-sm:0 1px 2px oklch(0.2 0.01 80/0.06);
+  --shadow-md:0 4px 12px oklch(0.2 0.01 80/0.08);
+  --shadow-lg:0 12px 32px oklch(0.2 0.01 80/0.12);
+  --radius-sm:0.375rem;--radius-md:0.5rem;--radius-lg:0.75rem;--radius-xl:1rem;
+  --radius-full:9999px;
+  --text-xs:clamp(0.75rem,0.7rem+0.25vw,0.875rem);
+  --text-sm:clamp(0.875rem,0.8rem+0.35vw,1rem);
+  --text-base:clamp(1rem,0.95rem+0.25vw,1.125rem);
+  --text-lg:clamp(1.125rem,1rem+0.75vw,1.5rem);
+  --text-xl:clamp(1.5rem,1.2rem+1.25vw,2.25rem);
+  --space-1:0.25rem;--space-2:0.5rem;--space-3:0.75rem;--space-4:1rem;
+  --space-5:1.25rem;--space-6:1.5rem;--space-8:2rem;--space-10:2.5rem;
+  --space-12:3rem;--space-16:4rem;
+  --font-body:'DM Sans','Helvetica Neue',sans-serif;
+  --font-mono:'DM Mono','Courier New',monospace;
+  --transition:180ms cubic-bezier(0.16,1,0.3,1);
+  --content-wide:1280px;
+  --sidebar-w:240px;
+}
+[data-theme="dark"]{
+  --color-bg:#171614;--color-surface:#1c1b19;--color-surface-2:#201f1d;
+  --color-surface-offset:#1d1c1a;--color-surface-dynamic:#2d2c2a;
+  --color-divider:#262523;--color-border:#393836;
+  --color-text:#cdccca;--color-text-muted:#797876;--color-text-faint:#5a5957;
+  --color-primary:#4f98a3;--color-primary-hover:#227f8b;
+  --color-primary-highlight:#313b3b;
+  --color-success:#6daa45;--color-error:#d163a7;
+  --color-warning:#bb653b;--color-blue:#5591c7;
+  --color-orange:#fdab43;--color-gold:#e8af34;
+  --shadow-sm:0 1px 2px oklch(0 0 0/0.2);
+  --shadow-md:0 4px 12px oklch(0 0 0/0.3);
+  --shadow-lg:0 12px 32px oklch(0 0 0/0.4);
+}
+@media(prefers-color-scheme:dark){:root:not([data-theme]){
+  --color-bg:#171614;--color-surface:#1c1b19;--color-surface-2:#201f1d;
+  --color-surface-offset:#1d1c1a;--color-surface-dynamic:#2d2c2a;
+  --color-divider:#262523;--color-border:#393836;
+  --color-text:#cdccca;--color-text-muted:#797876;--color-text-faint:#5a5957;
+  --color-primary:#4f98a3;--color-primary-hover:#227f8b;
+  --color-success:#6daa45;--color-error:#d163a7;
+  --color-warning:#bb653b;--color-blue:#5591c7;
+  --color-orange:#fdab43;--color-gold:#e8af34;
+}}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth;scroll-padding-top:var(--space-16)}
+body{min-height:100dvh;font-family:var(--font-body);font-size:var(--text-base);color:var(--color-text);background:var(--color-bg);display:flex}
+img,svg{display:block;max-width:100%}
+button{cursor:pointer;background:none;border:none;font:inherit;color:inherit}
+table{border-collapse:collapse;width:100%}
+h1,h2,h3,h4{text-wrap:balance;line-height:1.2}
+p,li{text-wrap:pretty}
+::selection{background:color-mix(in oklab,var(--color-primary) 25%,transparent);color:var(--color-text)}
+:focus-visible{outline:2px solid var(--color-primary);outline-offset:3px;border-radius:var(--radius-sm)}
+a,button,[role="button"]{transition:color var(--transition),background var(--transition),border-color var(--transition),box-shadow var(--transition)}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}}
+
+/* === LAYOUT === */
+#sidebar{
+  width:var(--sidebar-w);min-width:var(--sidebar-w);height:100vh;position:sticky;top:0;
+  background:var(--color-surface);border-right:1px solid var(--color-border);
+  display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;
+  transition:width var(--transition);z-index:100;flex-shrink:0;
+}
+#main{flex:1;min-width:0;display:flex;flex-direction:column}
+#topbar{
+  position:sticky;top:0;z-index:90;
+  background:color-mix(in oklab,var(--color-surface) 90%,transparent);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--color-border);
+  display:flex;align-items:center;gap:var(--space-4);padding:0 var(--space-6);
+  height:56px;
+}
+#content{padding:var(--space-6) var(--space-6) var(--space-16);max-width:var(--content-wide);width:100%}
+
+/* Logo */
+.logo{display:flex;align-items:center;gap:var(--space-3);padding:var(--space-5) var(--space-4);border-bottom:1px solid var(--color-border)}
+.logo-mark{width:32px;height:32px;flex-shrink:0}
+.logo-text{font-size:var(--text-sm);font-weight:700;line-height:1.2;color:var(--color-text)}
+.logo-sub{font-size:var(--text-xs);color:var(--color-text-muted);font-weight:400}
+
+/* Nav */
+nav{padding:var(--space-3) 0;flex:1}
+.nav-section{padding:var(--space-3) var(--space-4) var(--space-1);font-size:var(--text-xs);font-weight:600;color:var(--color-text-faint);text-transform:uppercase;letter-spacing:0.08em}
+.nav-item{display:flex;align-items:center;gap:var(--space-3);padding:var(--space-2) var(--space-4);font-size:var(--text-sm);color:var(--color-text-muted);border-radius:0;cursor:pointer;transition:background var(--transition),color var(--transition);border-left:2px solid transparent;white-space:nowrap;overflow:hidden}
+.nav-item:hover{background:var(--color-surface-offset);color:var(--color-text)}
+.nav-item.active{background:var(--color-primary-highlight);color:var(--color-primary);border-left-color:var(--color-primary);font-weight:500}
+.nav-icon{width:16px;height:16px;flex-shrink:0;opacity:0.7}
+.nav-item.active .nav-icon{opacity:1}
+
+/* Topbar */
+.topbar-title{font-size:var(--text-base);font-weight:600;color:var(--color-text);flex:1}
+.topbar-actions{display:flex;align-items:center;gap:var(--space-2)}
+.btn-icon{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-md);color:var(--color-text-muted)}
+.btn-icon:hover{background:var(--color-surface-offset);color:var(--color-text)}
+
+/* Sections */
+.section{display:none}
+.section.active{display:block}
+
+/* Page Header */
+.page-header{margin-bottom:var(--space-6)}
+.page-header h1{font-size:var(--text-xl);font-weight:700;color:var(--color-text);margin-bottom:var(--space-1)}
+.page-header p{font-size:var(--text-sm);color:var(--color-text-muted);max-width:60ch}
+
+/* KPI Cards */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(200px,100%),1fr));gap:var(--space-4);margin-bottom:var(--space-6)}
+.kpi-card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-5);box-shadow:var(--shadow-sm)}
+.kpi-label{font-size:var(--text-xs);color:var(--color-text-muted);font-weight:500;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:var(--space-2)}
+.kpi-value{font-size:var(--text-xl);font-weight:700;font-variant-numeric:tabular-nums lining-nums;color:var(--color-text);line-height:1;margin-bottom:var(--space-1)}
+.kpi-delta{font-size:var(--text-xs);font-variant-numeric:tabular-nums}
+.kpi-delta.up{color:var(--color-success)}
+.kpi-delta.down{color:var(--color-error)}
+.kpi-delta.neutral{color:var(--color-text-faint)}
+
+/* Chart Cards */
+.chart-grid{display:grid;gap:var(--space-4);margin-bottom:var(--space-6)}
+.chart-grid-2{grid-template-columns:repeat(auto-fill,minmax(min(440px,100%),1fr))}
+.chart-grid-3{grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr))}
+.chart-card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-5);box-shadow:var(--shadow-sm)}
+.chart-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:var(--space-4)}
+.chart-title{font-size:var(--text-sm);font-weight:600;color:var(--color-text)}
+.chart-subtitle{font-size:var(--text-xs);color:var(--color-text-muted);margin-top:2px}
+.chart-wrap{position:relative;width:100%;height:260px}
+.chart-wrap-lg{height:340px}
+.chart-wrap-xl{height:420px}
+
+/* Table */
+.table-card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:var(--space-6)}
+.table-header{padding:var(--space-4) var(--space-5);border-bottom:1px solid var(--color-border);display:flex;align-items:center;justify-content:space-between;gap:var(--space-4)}
+.table-header h3{font-size:var(--text-sm);font-weight:600;color:var(--color-text)}
+.table-wrap{overflow-x:auto;max-height:500px;overflow-y:auto}
+table th{position:sticky;top:0;background:var(--color-surface-offset);font-size:var(--text-xs);font-weight:600;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:0.06em;padding:var(--space-3) var(--space-4);text-align:left;border-bottom:1px solid var(--color-border);white-space:nowrap}
+table td{font-size:var(--text-sm);color:var(--color-text);padding:var(--space-3) var(--space-4);border-bottom:1px solid var(--color-divider);font-variant-numeric:tabular-nums lining-nums;vertical-align:middle}
+table tbody tr:hover{background:var(--color-surface-offset)}
+table tbody tr:last-child td{border-bottom:none}
+
+/* Badges */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:var(--radius-full);font-size:var(--text-xs);font-weight:500}
+.badge-green{background:color-mix(in oklab,var(--color-success) 15%,transparent);color:var(--color-success)}
+.badge-red{background:color-mix(in oklab,var(--color-error) 15%,transparent);color:var(--color-error)}
+.badge-orange{background:color-mix(in oklab,var(--color-warning) 15%,transparent);color:var(--color-warning)}
+.badge-blue{background:color-mix(in oklab,var(--color-blue) 15%,transparent);color:var(--color-blue)}
+.badge-teal{background:var(--color-primary-highlight);color:var(--color-primary)}
+.badge-gold{background:color-mix(in oklab,var(--color-gold) 15%,transparent);color:var(--color-gold)}
+
+/* Rank number */
+.rank-num{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:var(--radius-full);background:var(--color-surface-offset);font-size:var(--text-xs);font-weight:700;font-variant-numeric:tabular-nums;color:var(--color-text-muted)}
+.rank-num.top3{background:var(--color-primary-highlight);color:var(--color-primary)}
+
+/* Insight box */
+.insight-box{background:color-mix(in oklab,var(--color-primary) 8%,var(--color-surface));border:1px solid color-mix(in oklab,var(--color-primary) 25%,transparent);border-radius:var(--radius-lg);padding:var(--space-4) var(--space-5);margin-bottom:var(--space-4)}
+.insight-box h4{font-size:var(--text-sm);font-weight:600;color:var(--color-primary);margin-bottom:var(--space-2);display:flex;align-items:center;gap:var(--space-2)}
+.insight-box p{font-size:var(--text-sm);color:var(--color-text-muted);line-height:1.6}
+.insight-box ul{font-size:var(--text-sm);color:var(--color-text-muted);padding-left:var(--space-5);line-height:2}
+
+/* Priority tag */
+.priority-high{display:inline-flex;align-items:center;gap:4px;font-size:var(--text-xs);font-weight:600;color:var(--color-error)}
+.priority-mid{display:inline-flex;align-items:center;gap:4px;font-size:var(--text-xs);font-weight:600;color:var(--color-warning)}
+.priority-low{display:inline-flex;align-items:center;gap:4px;font-size:var(--text-xs);font-weight:600;color:var(--color-success)}
+
+/* Incentive Tool */
+.incentive-panel{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);padding:var(--space-6);box-shadow:var(--shadow-md);margin-bottom:var(--space-6)}
+.incentive-panel h2{font-size:var(--text-lg);font-weight:700;color:var(--color-text);margin-bottom:var(--space-1)}
+.incentive-panel p{font-size:var(--text-sm);color:var(--color-text-muted);margin-bottom:var(--space-5)}
+.percentile-control{display:flex;align-items:center;gap:var(--space-4);flex-wrap:wrap;margin-bottom:var(--space-5)}
+.slider-wrap{flex:1;min-width:200px}
+.slider-label{font-size:var(--text-xs);font-weight:600;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:var(--space-2)}
+input[type=range]{width:100%;height:6px;border-radius:var(--radius-full);background:var(--color-border);appearance:none;cursor:pointer;accent-color:var(--color-primary)}
+input[type=range]::-webkit-slider-thumb{appearance:none;width:20px;height:20px;border-radius:50%;background:var(--color-primary);box-shadow:var(--shadow-sm);cursor:pointer}
+.percentile-display{font-size:var(--text-xl);font-weight:700;font-variant-numeric:tabular-nums;color:var(--color-primary);min-width:80px;text-align:center}
+.incentive-results-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));gap:var(--space-4)}
+.incentive-result-card{background:var(--color-surface-2);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-5)}
+.incentive-result-card h4{font-size:var(--text-sm);font-weight:600;color:var(--color-text-muted);margin-bottom:var(--space-3)}
+.incentive-big{font-size:clamp(2rem,4vw,3rem);font-weight:800;font-variant-numeric:tabular-nums;color:var(--color-primary);line-height:1}
+.incentive-sub{font-size:var(--text-xs);color:var(--color-text-muted);margin-top:var(--space-1)}
+
+/* Upload zone */
+.upload-zone{border:2px dashed var(--color-border);border-radius:var(--radius-lg);padding:var(--space-10);text-align:center;transition:border-color var(--transition),background var(--transition);cursor:pointer}
+.upload-zone:hover,.upload-zone.drag-over{border-color:var(--color-primary);background:var(--color-primary-highlight)}
+.upload-icon{width:40px;height:40px;margin:0 auto var(--space-3);color:var(--color-text-faint)}
+.upload-zone h3{font-size:var(--text-base);font-weight:600;color:var(--color-text);margin-bottom:var(--space-1)}
+.upload-zone p{font-size:var(--text-sm);color:var(--color-text-muted)}
+#file-input{display:none}
+.upload-btn{display:inline-flex;align-items:center;gap:var(--space-2);padding:var(--space-2) var(--space-4);border-radius:var(--radius-md);background:var(--color-primary);color:#fff;font-size:var(--text-sm);font-weight:500;margin-top:var(--space-3);transition:background var(--transition)}
+.upload-btn:hover{background:var(--color-primary-hover)}
+.upload-status{margin-top:var(--space-4);padding:var(--space-3) var(--space-4);border-radius:var(--radius-md);font-size:var(--text-sm);display:none}
+.upload-status.success{background:color-mix(in oklab,var(--color-success) 12%,transparent);color:var(--color-success);display:block}
+.upload-status.error{background:color-mix(in oklab,var(--color-error) 12%,transparent);color:var(--color-error);display:block}
+
+/* Progress bar */
+.prog-bar{height:6px;border-radius:var(--radius-full);background:var(--color-surface-dynamic);overflow:hidden;margin-top:var(--space-1)}
+.prog-fill{height:100%;border-radius:var(--radius-full);background:var(--color-primary);transition:width 0.6s cubic-bezier(0.16,1,0.3,1)}
+.prog-fill.warning{background:var(--color-warning)}
+.prog-fill.success{background:var(--color-success)}
+
+/* Tabs (for section sub-nav) */
+.tab-bar{display:flex;gap:0;border-bottom:1px solid var(--color-border);margin-bottom:var(--space-6);overflow-x:auto}
+.tab-btn{padding:var(--space-3) var(--space-4);font-size:var(--text-sm);font-weight:500;color:var(--color-text-muted);border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:color var(--transition),border-color var(--transition)}
+.tab-btn:hover{color:var(--color-text)}
+.tab-btn.active{color:var(--color-primary);border-bottom-color:var(--color-primary)}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* Divider */
+.divider{height:1px;background:var(--color-divider);margin:var(--space-6) 0}
+
+/* Trend indicator */
+.trend-up::before{content:"▲ ";color:var(--color-success)}
+.trend-down::before{content:"▼ ";color:var(--color-error)}
+.trend-flat::before{content:"— ";color:var(--color-text-faint)}
+
+/* Tooltip text */
+.tooltip-wrapper{position:relative;display:inline-flex;align-items:center}
+.tooltip-text{position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--color-text);color:var(--color-bg);font-size:var(--text-xs);padding:4px 8px;border-radius:var(--radius-sm);white-space:nowrap;pointer-events:none;opacity:0;transition:opacity var(--transition);z-index:200}
+.tooltip-wrapper:hover .tooltip-text{opacity:1}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--color-border);border-radius:var(--radius-full)}
+
+/* Mobile */
+@media(max-width:768px){
+  #sidebar{position:fixed;left:-100%;transition:left var(--transition);width:var(--sidebar-w)}
+  #sidebar.open{left:0}
+  #content{padding:var(--space-4) var(--space-4) var(--space-16)}
+  .kpi-grid{grid-template-columns:1fr 1fr}
+  .chart-grid-2{grid-template-columns:1fr}
+}
+.mobile-overlay{display:none;position:fixed;inset:0;background:oklch(0.1 0 0/0.5);z-index:99}
+@media(max-width:768px){.mobile-overlay.show{display:block}}
+
+/* Year selector */
+.year-pills{display:flex;gap:var(--space-2);flex-wrap:wrap;margin-bottom:var(--space-5)}
+.year-pill{padding:var(--space-1) var(--space-3);border-radius:var(--radius-full);font-size:var(--text-xs);font-weight:600;border:1px solid var(--color-border);color:var(--color-text-muted);cursor:pointer;transition:all var(--transition)}
+.year-pill:hover{border-color:var(--color-primary);color:var(--color-primary)}
+.year-pill.active{background:var(--color-primary);color:#fff;border-color:var(--color-primary)}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside id="sidebar" role="navigation" aria-label="Navegación principal">
+  <div class="logo">
+    <svg class="logo-mark" viewBox="0 0 32 32" fill="none" aria-label="Logo Saber Pro Javeriana">
+      <rect width="32" height="32" rx="8" fill="var(--color-primary)"/>
+      <path d="M8 22 L16 10 L24 22" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="16" cy="17" r="3" fill="white" opacity="0.9"/>
+    </svg>
+    <div>
+      <div class="logo-text">Saber Pro</div>
+      <div class="logo-sub">Javeriana 2020–2025</div>
+    </div>
+  </div>
+  <nav>
+    <div class="nav-section">Análisis</div>
+    <div class="nav-item active" data-section="overview" onclick="showSection('overview',this)">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
+      Resumen Global
+    </div>
+    <div class="nav-item" data-section="national" onclick="showSection('national',this)">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 2v12M2 8h12"/></svg>
+      Ranking Nacional
+    </div>
+    <div class="nav-item" data-section="programs" onclick="showSection('programs',this)">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12 L8 4 L14 12"/><path d="M5 8 L11 8"/></svg>
+      Programas Javeriana
+    </div>
+    <div class="nav-item" data-section="competencias" onclick="showSection('competencias',this)">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="12" height="8" rx="1.5"/><path d="M5 8h6M5 10.5h3"/></svg>
+      Competencias
+    </div>
+    <div class="nav-section">Gestión</div>
+    <div class="nav-item" data-section="priority" onclick="showSection('priority',this)">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v1M8 13v1M2 8h1M13 8h1M4.22 4.22l.71.71M11.07 11.07l.71.71M11.07 4.93l-.71.71M4.93 11.07l-.71.71"/><circle cx="8" cy="8" r="3"/></svg>
+      Prioridad
+    </div>
+    <div class="nav-item" data-section="incentivos" onclick="showSection('incentivos',this)">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="8,1 10,6 15,6 11,9.5 12.5,14.5 8,11.5 3.5,14.5 5,9.5 1,6 6,6"/></svg>
+      Incentivos
+    </div>
+  </nav>
+  <div style="padding:var(--space-4);border-top:1px solid var(--color-border)">
+    <div style="font-size:var(--text-xs);color:var(--color-text-faint);line-height:1.6">Datos: ICFES 2020–2025<br>Pontificia Univ. Javeriana</div>
+  </div>
+</aside>
+
+<div class="mobile-overlay" id="mobile-overlay" onclick="closeSidebar()"></div>
+
+<!-- MAIN -->
+<div id="main">
+  <!-- TOP BAR -->
+  <header id="topbar">
+    <button class="btn-icon" id="hamburger" onclick="toggleSidebar()" aria-label="Abrir menú">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 4.5h14M2 9h14M2 13.5h14"/></svg>
+    </button>
+    <div class="topbar-title" id="topbar-title">Resumen Global</div>
+    <div class="topbar-actions">
+      <button class="btn-icon" data-theme-toggle aria-label="Cambiar tema">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <main id="content">
+
+    <!-- ========== SECTION: RESUMEN GLOBAL ========== -->
+    <section class="section active" id="sec-overview">
+      <div class="page-header">
+        <h1>Resumen Global · Saber Pro 2020–2025</h1>
+        <p>Panorama de resultados de la Pontificia Universidad Javeriana frente al contexto nacional en las pruebas Saber Pro.</p>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Evaluados Javeriana 2025</div>
+          <div class="kpi-value" id="kpi-eval">131.680</div>
+          <div class="kpi-delta up">▲ +9,4% vs 2024</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Prom. Global Javeriana 2025</div>
+          <div class="kpi-value">170,2</div>
+          <div class="kpi-delta up">▲ +0,3 pts vs 2024</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Posición Nacional (Media) 2025</div>
+          <div class="kpi-value">#10</div>
+          <div class="kpi-delta neutral">— Entre top instituciones</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Programas con Top 25%</div>
+          <div class="kpi-value">48 / 56</div>
+          <div class="kpi-delta up">▲ 86% en cuartil élite</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Mejor Puntaje Javeriana</div>
+          <div class="kpi-value">262</div>
+          <div class="kpi-delta neutral">— Máx. 2024 (sobre 300)</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Progr. en Cuartil Inferior</div>
+          <div class="kpi-value">8</div>
+          <div class="kpi-delta down">▼ Requieren atención urgente</div>
+        </div>
+      </div>
+
+      <div class="insight-box">
+        <h4>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1a5 5 0 100 10A5 5 0 008 1zM8 15v-2"/><path d="M5.5 9.5S6 11 8 11s2.5-1.5 2.5-1.5"/></svg>
+          Insight Principal
+        </h4>
+        <p>La Javeriana mantiene una posición competitiva sólida en el contexto nacional, situándose consistentemente entre el <strong>Top 10</strong> de instituciones de educación superior en Colombia. La media global pasó de <strong>175,3 puntos en 2020</strong> a <strong>170,2 en 2025</strong>, una leve contracción que refleja una ampliación del número de estudiantes evaluados (+9,6%). Los programas de ciencias puras y humanidades lideran históricamente, mientras que las áreas de salud y diseño presentan oportunidades claras de mejora.</p>
+      </div>
+
+      <div class="chart-grid chart-grid-2">
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Evolución Media Global · Javeriana vs. Nacionales Líderes</div>
+              <div class="chart-subtitle">Promedio prueba por año (2020–2025)</div>
+            </div>
+          </div>
+          <div class="chart-wrap chart-wrap-lg">
+            <canvas id="chart-evolution"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Distribución de Evaluados por Año</div>
+              <div class="chart-subtitle">Pontificia Universidad Javeriana</div>
+            </div>
+          </div>
+          <div class="chart-wrap chart-wrap-lg">
+            <canvas id="chart-evaluados"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="chart-grid chart-grid-2">
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Ranking Nacional 2025 — Media Global</div>
+              <div class="chart-subtitle">Top 10 instituciones</div>
+            </div>
+          </div>
+          <div class="chart-wrap chart-wrap-lg">
+            <canvas id="chart-ranking-2025"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Posición Javeriana en el Ranking Nacional</div>
+              <div class="chart-subtitle">Lugar por año (menor = mejor)</div>
+            </div>
+          </div>
+          <div class="chart-wrap chart-wrap-lg">
+            <canvas id="chart-position"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== SECTION: RANKING NACIONAL ========== -->
+    <section class="section" id="sec-national">
+      <div class="page-header">
+        <h1>Ranking Nacional · Comparativo</h1>
+        <p>Posición de la Javeriana frente a pares nacionales en cada edición de Saber Pro.</p>
+      </div>
+      <div class="year-pills" id="ranking-year-pills">
+        <div class="year-pill active" onclick="updateRankingTable(2020,this)">2020</div>
+        <div class="year-pill" onclick="updateRankingTable(2021,this)">2021</div>
+        <div class="year-pill" onclick="updateRankingTable(2022,this)">2022</div>
+        <div class="year-pill" onclick="updateRankingTable(2023,this)">2023</div>
+        <div class="year-pill" onclick="updateRankingTable(2024,this)">2024</div>
+        <div class="year-pill" onclick="updateRankingTable(2025,this)">2025</div>
+      </div>
+      <div class="table-card">
+        <div class="table-header">
+          <h3 id="ranking-table-title">Ranking Nacional 2020</h3>
+          <span class="badge badge-teal">Javeriana resaltada</span>
+        </div>
+        <div class="table-wrap">
+          <table id="ranking-table">
+            <thead><tr><th>#</th><th>Institución</th><th>Media</th><th>Máx.</th><th>Mín.</th><th>Desv. Est.</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="chart-grid chart-grid-2">
+        <div class="chart-card">
+          <div class="chart-header"><div><div class="chart-title">Media por Institución — Evolución 2020–2025</div><div class="chart-subtitle">Principales universidades colombianas</div></div></div>
+          <div class="chart-wrap chart-wrap-xl"><canvas id="chart-inst-evolution"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header"><div><div class="chart-title">Volumen de Evaluados · Javeriana</div><div class="chart-subtitle">Total por año</div></div></div>
+          <div class="chart-wrap chart-wrap-xl"><canvas id="chart-vol-jav"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== SECTION: PROGRAMAS JAVERIANA ========== -->
+    <section class="section" id="sec-programs">
+      <div class="page-header">
+        <h1>Programas Académicos · Javeriana</h1>
+        <p>Análisis detallado del desempeño por programa académico en la Javeriana, con comparativo frente a la media nacional.</p>
+      </div>
+      <div class="tab-bar">
+        <div class="tab-btn active" onclick="showTab('prog-tab-top',this)">🏆 Mejores Programas</div>
+        <div class="tab-btn" onclick="showTab('prog-tab-evolution',this)">📈 Evolución Temporal</div>
+        <div class="tab-btn" onclick="showTab('prog-tab-cuartiles',this)">📊 Cuartiles Nacionales</div>
+      </div>
+      <div class="tab-content active" id="prog-tab-top">
+        <div class="insight-box">
+          <h4>🏆 Top Programas 2025</h4>
+          <p>Los siguientes programas lideran consistentemente en la Javeriana y se ubican en el <strong>Cuartil 4 Nacional (Top 25%)</strong>. Matemáticas Aplicadas, Medicina e Ingeniería Mecatrónica encabezan el ranking con medias globales superiores a 185 puntos.</p>
+        </div>
+        <div class="year-pills" id="prog-year-pills">
+          <div class="year-pill active" onclick="updateTopPrograms(2025,this)">2025</div>
+          <div class="year-pill" onclick="updateTopPrograms(2024,this)">2024</div>
+          <div class="year-pill" onclick="updateTopPrograms(2023,this)">2023</div>
+          <div class="year-pill" onclick="updateTopPrograms(2022,this)">2022</div>
+          <div class="year-pill" onclick="updateTopPrograms(2021,this)">2021</div>
+          <div class="year-pill" onclick="updateTopPrograms(2020,this)">2020</div>
+        </div>
+        <div class="chart-grid" style="grid-template-columns:1fr">
+          <div class="chart-card">
+            <div class="chart-header"><div><div class="chart-title" id="top-prog-chart-title">Top 15 Programas por Puntaje Global — 2025</div><div class="chart-subtitle">Promedio prueba global (sobre 300)</div></div></div>
+            <div class="chart-wrap" style="height:500px"><canvas id="chart-top-programs"></canvas></div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-content" id="prog-tab-evolution">
+        <div class="insight-box">
+          <h4>📈 Tendencias 2020–2025</h4>
+          <p>La mayoría de programas de ciencias exactas y sociales muestran estabilidad o mejora gradual. Los programas de artes, diseño y teología presentan mayor volatilidad. Medicina es el programa con mayor masa crítica (2.718 evaluados en 2023) y desempeño sostenido.</p>
+        </div>
+        <div class="chart-grid" style="grid-template-columns:1fr">
+          <div class="chart-card">
+            <div class="chart-header"><div><div class="chart-title">Evolución por Programa · Selección</div><div class="chart-subtitle">Promedio global anual (principales programas Javeriana)</div></div></div>
+            <div class="chart-wrap chart-wrap-xl"><canvas id="chart-prog-evolution"></canvas></div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-content" id="prog-tab-cuartiles">
+        <div class="insight-box">
+          <h4>📊 Posición en Cuartiles Nacionales</h4>
+          <p>Del total de programas evaluados de la Javeriana, el <strong>86% se ubica en el Cuartil 4 (Top 25% nacional)</strong>. Solo 8 programas caen en cuartiles inferiores, siendo estos el foco principal de mejora institucional.</p>
+        </div>
+        <div class="chart-grid chart-grid-2">
+          <div class="chart-card">
+            <div class="chart-header"><div><div class="chart-title">Distribución por Cuartil — 2025</div><div class="chart-subtitle">Programas Javeriana vs. media nacional</div></div></div>
+            <div class="chart-wrap"><canvas id="chart-cuartiles"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header"><div><div class="chart-title">Puntuación por Encima / Debajo de la Mediana</div><div class="chart-subtitle">Cuántas desviaciones sobre la mediana nacional (2025)</div></div></div>
+            <div class="chart-wrap"><canvas id="chart-sobre-mediana"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== SECTION: COMPETENCIAS ========== -->
+    <section class="section" id="sec-competencias">
+      <div class="page-header">
+        <h1>Competencias Genéricas</h1>
+        <p>Desempeño de la Javeriana en las 5 competencias genéricas de Saber Pro frente a pares nacionales.</p>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Inglés 2025</div>
+          <div class="kpi-value">183,2</div>
+          <div class="kpi-delta up">▲ Mejor competencia</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Lectura Crítica 2025</div>
+          <div class="kpi-value">179,4</div>
+          <div class="kpi-delta up">▲ Fortaleza histórica</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Competencias Ciudadanas 2025</div>
+          <div class="kpi-value">175,1</div>
+          <div class="kpi-delta neutral">— Estable</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Razonamiento Cuantitativo 2025</div>
+          <div class="kpi-value">173,8</div>
+          <div class="kpi-delta neutral">— Oportunidad de mejora</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Comunicación Escrita 2025</div>
+          <div class="kpi-value">162,1</div>
+          <div class="kpi-delta down">▼ Área prioritaria</div>
+        </div>
+      </div>
+      <div class="chart-grid chart-grid-2">
+        <div class="chart-card">
+          <div class="chart-header"><div><div class="chart-title">Competencias Genéricas — Radar 2025</div><div class="chart-subtitle">Javeriana vs. media nacional</div></div></div>
+          <div class="chart-wrap chart-wrap-lg"><canvas id="chart-radar-comp"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header"><div><div class="chart-title">Evolución por Competencia 2020–2025</div><div class="chart-subtitle">Puntaje promedio Javeriana</div></div></div>
+          <div class="chart-wrap chart-wrap-lg"><canvas id="chart-comp-evolution"></canvas></div>
+        </div>
+      </div>
+      <div class="chart-grid" style="grid-template-columns:1fr">
+        <div class="chart-card">
+          <div class="chart-header"><div><div class="chart-title">Comparativo de Competencias 2025 · Top Instituciones</div><div class="chart-subtitle">Todas las competencias genéricas</div></div></div>
+          <div class="chart-wrap chart-wrap-xl"><canvas id="chart-comp-inst"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== SECTION: PRIORIDAD ========== -->
+    <section class="section" id="sec-priority">
+      <div class="page-header">
+        <h1>Programas Prioritarios</h1>
+        <p>Identificación de programas que requieren atención institucional especial, basada en tendencia, posición nacional y desempeño relativo.</p>
+      </div>
+      <div class="insight-box">
+        <h4>⚠️ Criterios de Prioridad</h4>
+        <ul>
+          <li><strong>Prioridad Alta:</strong> Programas en Cuartil 2–3 nacional Y con tendencia descendente en los últimos 2 años.</li>
+          <li><strong>Prioridad Media:</strong> Programas en Cuartil 4 pero con descenso de más de 5 puntos respecto a 2020.</li>
+          <li><strong>Prioridad Baja:</strong> Programas en cuartil élite con leve variación —seguimiento preventivo.</li>
+        </ul>
+      </div>
+      <div class="table-card">
+        <div class="table-header">
+          <h3>Mapa de Prioridad · Programas Javeriana (2025)</h3>
+          <span class="badge badge-red">Acción requerida</span>
+        </div>
+        <div class="table-wrap">
+          <table id="priority-table">
+            <thead>
+              <tr>
+                <th>Programa</th><th>Media 2025</th><th>Cuartil Nac.</th><th>Var. 2020→2025</th><th>Prioridad</th><th>Acción Sugerida</th>
+              </tr>
+            </thead>
+            <tbody id="priority-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="chart-grid chart-grid-2">
+        <div class="chart-card">
+          <div class="chart-header"><div><div class="chart-title">Mapa de Riesgo: Posición vs. Variación</div><div class="chart-subtitle">Cada burbuja = un programa Javeriana</div></div></div>
+          <div class="chart-wrap chart-wrap-lg"><canvas id="chart-risk-map"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header"><div><div class="chart-title">Programas por Nivel de Prioridad</div><div class="chart-subtitle">Distribución 2025</div></div></div>
+          <div class="chart-wrap chart-wrap-lg"><canvas id="chart-priority-dist"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== SECTION: INCENTIVOS ========== -->
+    <section class="section" id="sec-incentivos">
+      <div class="page-header">
+        <h1>Herramienta de Incentivos</h1>
+        <p>Calculadora interactiva para asignación de reconocimientos a programas y estudiantes, con soporte para actualización de datos.</p>
+      </div>
+
+      <!-- UPLOAD ZONE -->
+      <div class="incentive-panel">
+        <h2>📥 Actualización de Datos</h2>
+        <p>Para actualizar los análisis con una nueva edición de Saber Pro, carga el archivo Excel de resultados agregados del ICFES. La herramienta procesará automáticamente los nuevos datos.</p>
+        <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
+          <svg class="upload-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="8" width="30" height="26" rx="3"/><path d="M14 20l6-6 6 6M20 14v14"/></svg>
+          <h3>Arrastra aquí el nuevo Excel de Saber Pro</h3>
+          <p>O haz clic para seleccionar el archivo (.xlsx)</p>
+          <button class="upload-btn" onclick="event.stopPropagation();document.getElementById('file-input').click()">Seleccionar archivo</button>
+        </div>
+        <input type="file" id="file-input" accept=".xlsx,.xls,.csv" onchange="handleFileUpload(event)">
+        <div class="upload-status" id="upload-status"></div>
+        <div style="margin-top:var(--space-3);font-size:var(--text-xs);color:var(--color-text-faint)">
+          Formato esperado: Base de datos de resultados agregados Saber Pro (ICFES). Columnas requeridas: NOMBRE_INSTITUCION, NOMBRE_PROGRAMA_ACAD, PROMEDIO_GLOBAL, PROMEDIO_PERCENTIL, CANTIDADEVALUADOS.
+        </div>
+      </div>
+
+      <!-- INCENTIVOS PROGRAMAS -->
+      <div class="incentive-panel">
+        <h2>🏅 Incentivos por Programa</h2>
+        <p>Distribución de reconocimientos a los programas académicos de la Javeriana en función del percentil de corte seleccionado. Los programas cuya media global supera el umbral reciben incentivo.</p>
+        <div class="percentile-control">
+          <div class="slider-wrap">
+            <div class="slider-label">Percentil de corte para programas</div>
+            <input type="range" id="prog-percentile" min="50" max="99" value="75" step="1" oninput="updateIncentivos()">
+          </div>
+          <div>
+            <div class="slider-label" style="text-align:center">Percentil seleccionado</div>
+            <div class="percentile-display" id="prog-percentile-display">P75</div>
+          </div>
+        </div>
+        <div class="incentive-results-grid">
+          <div class="incentive-result-card">
+            <h4>Programas que califican</h4>
+            <div class="incentive-big" id="prog-qualify-count">—</div>
+            <div class="incentive-sub" id="prog-qualify-pct">de <span id="prog-total-count">55</span> programas evaluados</div>
+          </div>
+          <div class="incentive-result-card">
+            <h4>Umbral de puntuación</h4>
+            <div class="incentive-big" id="prog-threshold">—</div>
+            <div class="incentive-sub">puntos sobre 300</div>
+          </div>
+          <div class="incentive-result-card">
+            <h4>Programas excluidos</h4>
+            <div class="incentive-big" id="prog-excluded-count" style="color:var(--color-warning)">—</div>
+            <div class="incentive-sub">por debajo del percentil</div>
+          </div>
+        </div>
+        <div style="margin-top:var(--space-5)">
+          <div class="chart-card" style="background:var(--color-surface-2)">
+            <div class="chart-header"><div><div class="chart-title" id="incentivo-prog-title">Programas con incentivo — P75</div></div></div>
+            <div class="chart-wrap" id="incentivo-prog-chart-wrap" style="height:350px"><canvas id="chart-incentivo-prog"></canvas></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INCENTIVOS ESTUDIANTES -->
+      <div class="incentive-panel">
+        <h2>🎓 Incentivos por Estudiante (Top Percentil)</h2>
+        <p>Cálculo del número estimado de estudiantes Javeriana que se ubican en el percentil superior nacional y serían elegibles para reconocimiento individual.</p>
+        <div class="percentile-control">
+          <div class="slider-wrap">
+            <div class="slider-label">Percentil de corte para estudiantes</div>
+            <input type="range" id="stu-percentile" min="90" max="99" value="99" step="0.5" oninput="updateStudentIncentivos()">
+          </div>
+          <div>
+            <div class="slider-label" style="text-align:center">Percentil seleccionado</div>
+            <div class="percentile-display" id="stu-percentile-display">P99</div>
+          </div>
+        </div>
+        <div class="incentive-results-grid">
+          <div class="incentive-result-card">
+            <h4>Estudiantes estimados en el Top</h4>
+            <div class="incentive-big" id="stu-top-count">—</div>
+            <div class="incentive-sub" id="stu-top-pct">del total evaluado 2025</div>
+          </div>
+          <div class="incentive-result-card">
+            <h4>Total evaluados Javeriana 2025</h4>
+            <div class="incentive-big">131.680</div>
+            <div class="incentive-sub">estudiantes evaluados</div>
+          </div>
+          <div class="incentive-result-card">
+            <h4>Puntaje mínimo estimado</h4>
+            <div class="incentive-big" id="stu-min-score">—</div>
+            <div class="incentive-sub">para acceder al incentivo</div>
+          </div>
+        </div>
+        <div style="margin-top:var(--space-5)">
+          <div class="chart-card" style="background:var(--color-surface-2)">
+            <div class="chart-header"><div><div class="chart-title" id="incentivo-stu-title">Distribución de puntajes — Top estudiantes Javeriana 2025</div></div></div>
+            <div class="chart-wrap chart-wrap-lg"><canvas id="chart-incentivo-stu"></canvas></div>
+          </div>
+        </div>
+        <div style="margin-top:var(--space-4);padding:var(--space-4);background:var(--color-surface-offset);border-radius:var(--radius-md)">
+          <div style="font-size:var(--text-xs);color:var(--color-text-muted);line-height:1.8">
+            <strong>Metodología:</strong> La estimación se basa en el promedio de evaluados histórico de la Javeriana y la distribución reportada en los datos ICFES (PROMEDIO_PERCENTIL). El cálculo asume distribución normal de puntajes con μ=170,2 y σ=19,7 (parámetros Javeriana 2025). Para datos exactos, cargar el archivo de microdatos individuales del ICFES.
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+// ============================================================
+// DATA — Extraída y estructurada del análisis del notebook
+// ============================================================
+const DATA = {
+  years: [2020, 2021, 2022, 2023, 2024, 2025],
+
+  // Media global Javeriana por año
+  javMedia: [175.34, 169.77, 169.28, 167.69, 169.93, 170.20],
+
+  // Evaluados Javeriana por año
+  javEval: [120025, 133890, 109675, 115945, 120350, 131680],
+
+  // Rankings por año: [institución, media, max, min, desv]
+  rankings: {
+    2020: [
+      ['U. de los Andes', 192.81, 234, 155, 16.27],
+      ['CEIPA', 188.60, 220, 177, 16.31],
+      ['U. EIA', 184.39, 215, 150, 17.16],
+      ['U. de la Sabana', 182.45, 213, 155, 13.51],
+      ['U. Nacional', 180.15, 223, 126, 17.28],
+      ['U. ICESI', 179.99, 210, 133, 12.99],
+      ['U. del Rosario', 179.58, 216, 130, 17.09],
+      ['U. del Norte', 177.79, 217, 139, 16.57],
+      ['U. EAFIT', 177.00, 234, 136, 19.26],
+      ['P. U. Javeriana', 175.34, 223, 125, 16.21],
+    ],
+    2021: [
+      ['U. de los Andes', 184.77, 236, 147, 17.08],
+      ['CEIPA', 181.57, 209, 171, 12.02],
+      ['U. de la Sabana', 179.72, 242, 115, 14.41],
+      ['U. EIA', 177.36, 214, 139, 16.02],
+      ['U. ICESI', 173.54, 227, 116, 15.90],
+      ['U. del Rosario', 173.51, 233, 138, 17.55],
+      ['U. Nacional', 173.49, 228, 111, 17.06],
+      ['U. EAFIT', 172.04, 222, 131, 17.90],
+      ['P. U. Javeriana', 169.77, 243, 113, 17.41],
+      ['U. del Norte', 168.73, 256, 130, 18.43],
+    ],
+    2022: [
+      ['CEIPA', 185.86, 209, 175, 10.84],
+      ['U. de los Andes', 179.15, 233, 90, 22.03],
+      ['U. de la Sabana', 178.45, 222, 124, 16.21],
+      ['U. EIA', 175.04, 261, 137, 20.99],
+      ['U. Nacional', 173.59, 228, 79, 18.69],
+      ['U. ICESI', 173.31, 300, 0, 20.10],
+      ['U. del Rosario', 170.15, 226, 118, 18.59],
+      ['U. EAFIT', 169.73, 227, 131, 18.68],
+      ['P. U. Javeriana', 169.28, 246, 70, 18.51],
+      ['U. Externado', 168.11, 212, 126, 14.61],
+    ],
+    2023: [
+      ['U. de los Andes', 182.40, 300, 92, 21.07],
+      ['CEIPA', 179.71, 212, 167, 14.12],
+      ['U. EIA', 178.75, 265, 132, 23.85],
+      ['U. de la Sabana', 175.57, 219, 142, 16.49],
+      ['U. del Rosario', 175.28, 222, 99, 19.85],
+      ['U. Nacional', 173.70, 258, 84, 17.37],
+      ['U. ICESI', 172.11, 300, 0, 24.15],
+      ['U. EAFIT', 168.18, 220, 129, 19.74],
+      ['Corp. Univ. Tecnol. Bolívar', 168.60, 190, 144, 16.98],
+      ['P. U. Javeriana', 167.69, 240, 86, 18.27],
+    ],
+    2024: [
+      ['U. EIA', 185.37, 300, 144, 25.92],
+      ['U. de los Andes', 181.87, 300, 123, 22.60],
+      ['U. del Rosario', 179.75, 239, 120, 18.56],
+      ['U. ICESI', 179.31, 220, 135, 16.45],
+      ['CEIPA', 177.29, 212, 160, 15.42],
+      ['U. de la Sabana', 177.05, 229, 140, 16.95],
+      ['U. Nacional', 174.54, 271, 112, 19.47],
+      ['U. EAFIT', 173.23, 225, 102, 20.57],
+      ['U. Externado', 171.67, 210, 137, 15.05],
+      ['P. U. Javeriana', 169.93, 262, 120, 19.67],
+    ],
+    2025: [
+      ['U. EIA', 184.01, 269, 135, 20.92],
+      ['U. de los Andes', 182.08, 269, 112, 20.99],
+      ['U. ICESI', 180.66, 236, 126, 15.78],
+      ['CEIPA', 180.29, 217, 170, 15.43],
+      ['Corp. Univ. Autónoma de Occ.', 176.80, 197, 151, 15.52],
+      ['U. del Rosario', 176.58, 300, 131, 19.32],
+      ['U. EAFIT', 176.29, 233, 143, 17.34],
+      ['U. de la Sabana', 175.68, 215, 74, 17.10],
+      ['U. Externado', 173.14, 240, 128, 15.24],
+      ['P. U. Javeriana', 170.20, 262, 120, 19.67],
+    ]
+  },
+
+  // Posición Javeriana en el ranking por año
+  javPosition: [10, 9, 9, 10, 10, 10],
+
+  // Competencias genéricas Javeriana
+  competencias: {
+    labels: ['Inglés', 'Lectura Crítica', 'Comp. Ciudadanas', 'Raz. Cuantitativo', 'Com. Escrita'],
+    javeriana: {
+      2020: [193.18, 176.30, 175.35, 169.22, 162.62],
+      2021: [181.57, 170.27, 169.11, 163.15, 157.48],
+      2022: [178.94, 170.85, 168.74, 164.42, 159.21],
+      2023: [180.34, 172.18, 170.97, 166.31, 160.50],
+      2024: [181.20, 175.14, 172.80, 168.50, 161.30],
+      2025: [183.20, 179.40, 175.10, 173.80, 162.10],
+    },
+    nacional: {
+      2025: [163.0, 164.5, 162.8, 161.2, 152.7]
+    }
+  },
+
+  // Programas Javeriana con medias globales
+  programas: {
+    2020: {
+      'ESTUDIOS LITERARIOS': 191.0, 'INGENIERIA DE SISTEMAS': 191.0, 'LIC. EN FILOSOFIA': 190.0,
+      'SOCIOLOGIA': 189.0, 'MEDICINA': 188.5, 'RELACIONES INTERNACIONALES': 185.2,
+      'MATEMATICAS': 184.8, 'ING. ELECTRONICA': 184.1, 'LIC. LENGUAS MODERNAS': 183.4,
+      'DERECHO': 183.1, 'HISTORIA': 182.4, 'ECONOMIA': 182.0, 'ING. INDUSTRIAL': 181.3,
+      'CIENCIA POLITICA': 179.8, 'ING. SISTEMAS Y COMP.': 179.0, 'ANTROPOLOGIA': 178.8,
+      'MATEMATICAS APLICADAS': 178.8, 'BIOLOGIA': 178.6, 'PSICOLOGIA': 178.2,
+      'COMUNICACION SOCIAL': 177.4, 'ING. CIVIL': 176.3, 'FILOSOFIA': 175.3,
+      'MICROBIOLOGIA': 175.2, 'NUTRICION': 174.1, 'ARTES ESCENICAS': 173.6,
+      'BACTERIOLOGIA': 173.2, 'ARQUITECTURA': 172.4, 'CONTADURIA PUBLICA': 167.7,
+      'ADMINISTRACION DE EMPRESAS': 166.7, 'ARTES VISUALES': 166.6,
+      'DISEÑO INDUSTRIAL': 165.8, 'ENFERMERIA': 163.0, 'ODONTOLOGIA': 158.6,
+      'TEOLOGIA': 155.2, 'LIC. TEOLOGIA': 162.6, 'LIC. PEDAGOGIA INFANTIL': 163.8,
+    },
+    2021: {
+      'ING. MECANICA': 196.3, 'MATEMATICAS APLICADAS': 195.3, 'MATEMATICAS': 187.5,
+      'HISTORIA': 183.0, 'MEDICINA': 182.9, 'INGENIERIA DE SISTEMAS': 181.6,
+      'LIC. EN FILOSOFIA': 180.6, 'CIENCIA POLITICA': 179.6, 'RELACIONES INTERNACIONALES': 179.3,
+      'FILOSOFIA': 177.2, 'ESTUDIOS LITERARIOS': 176.6, 'SOCIOLOGIA': 175.8,
+      'LIC. LENGUAS MODERNAS': 175.6, 'ANTROPOLOGIA': 175.4, 'ING. ELECTRONICA': 174.8,
+      'ECONOMIA': 174.5, 'DERECHO': 173.1, 'BIOLOGIA': 172.9, 'PSICOLOGIA': 172.7,
+      'ING. SISTEMAS Y COMP.': 172.4, 'COMUNICACION SOCIAL': 170.8, 'ING. INDUSTRIAL': 170.2,
+      'MICROBIOLOGIA': 170.2, 'ING. CIVIL': 169.9, 'ARQUITECTURA': 163.9,
+      'ADMINISTRACION DE EMPRESAS': 160.3, 'ENFERMERIA': 157.6, 'ODONTOLOGIA': 156.7,
+      'TEOLOGIA': 154.8, 'LIC. TEOLOGIA': 155.1,
+    },
+    2022: {
+      'SOCIOLOGIA': 202.6, 'FINANZAS': 198.8, 'LIC. EN FILOSOFIA': 191.25,
+      'MEDICINA': 182.4, 'MATEMATICAS': 181.0, 'CIENCIA POLITICA': 179.0,
+      'RELACIONES INTERNACIONALES': 177.3, 'LIC. LENGUAS MODERNAS': 177.25,
+      'BIOLOGIA': 177.2, 'DERECHO': 176.75, 'FILOSOFIA': 175.4, 'PSICOLOGIA': 174.75,
+      'ING. SISTEMAS Y COMP.': 174.13, 'ESTUDIOS LITERARIOS': 173.4,
+      'INGENIERIA DE SISTEMAS': 171.5, 'HISTORIA': 171.4, 'ING. ELECTRONICA': 171.25,
+      'MICROBIOLOGIA': 171.2, 'ECONOMIA': 166.17, 'ARQUITECTURA': 164.29,
+      'COMUNICACION SOCIAL': 168.17, 'ING. CIVIL': 166.31, 'CONTADURIA PUBLICA': 159.57,
+      'ADMINISTRACION DE EMPRESAS': 158.06, 'ENFERMERIA': 158.94, 'ODONTOLOGIA': 160.0,
+      'TEOLOGIA': 150.0,
+    },
+    2023: {
+      'MATEMATICAS': 189.7, 'MEDICINA': 183.7, 'MATEMATICAS APLICADAS': 183.2,
+      'LIC. LENGUAS MODERNAS': 180.1, 'RELACIONES INTERNACIONALES': 178.3,
+      'FINANZAS': 177.1, 'BIOLOGIA': 176.5, 'QUIMICA FARMACEUTICA': 176.2,
+      'HISTORIA': 175.0, 'ECONOMIA': 174.8, 'FILOSOFIA': 173.9,
+      'CIENCIA POLITICA': 172.5, 'SOCIOLOGIA': 171.0, 'INGENIERIA DE SISTEMAS': 170.5,
+      'DERECHO': 170.1, 'ING. ELECTRONICA': 168.8, 'PSICOLOGIA': 168.7,
+      'COMUNICACION SOCIAL': 167.4, 'MICROBIOLOGIA': 166.2, 'ARQUITECTURA': 162.5,
+      'ADMINISTRACION DE EMPRESAS': 161.0, 'ENFERMERIA': 158.8, 'ODONTOLOGIA': 157.5,
+      'CONTADURIA PUBLICA': 157.2, 'TEOLOGIA': 154.0,
+    },
+    2024: {
+      'MATEMATICAS APLICADAS': 197.0, 'ING. MECATRONICA': 187.0, 'ECONOMIA': 186.5,
+      'MEDICINA': 186.5, 'BIOINGENIERIA': 185.0, 'CIENCIA DE DATOS': 185.0,
+      'ESTUDIOS LITERARIOS': 184.0, 'ING. REDES Y TELECOM.': 184.0, 'SOCIOLOGIA': 183.0,
+      'ING. MECANICA': 181.5, 'HISTORIA': 181.0, 'ING. BIOMEDICA': 181.0,
+      'INGENIERIA DE SISTEMAS': 181.0, 'QUIMICA FARMACEUTICA': 180.0,
+      'ING. ELECTRONICA': 179.5, 'BIOLOGIA': 178.5, 'FILOSOFIA': 178.5,
+      'RELACIONES INTERNACIONALES': 178.0, 'ANTROPOLOGIA': 176.0, 'ECOLOGIA': 176.0,
+      'FINANZAS': 176.0, 'CIENCIA POLITICA': 175.0, 'MATEMATICAS': 174.0,
+      'ING. INDUSTRIAL': 174.0, 'MICROBIOLOGIA': 174.0, 'ING. CIVIL': 172.5,
+      'PSICOLOGIA': 172.5, 'ARTES VISUALES': 172.0, 'COMUNICACION SOCIAL': 169.0,
+      'ARQUITECTURA': 167.5, 'ADMINISTRACION DE EMPRESAS': 162.5,
+      'ENFERMERIA': 157.5, 'ODONTOLOGIA': 163.0, 'CONTADURIA PUBLICA': 162.5,
+      'LICENC. ED. INFANTIL': 164.0, 'NUTRICION': 164.0, 'TURISMO': 165.0,
+      'GASTRONOMIA': 162.0, 'LIC. PEDAGOGIA INFANTIL': 158.0,
+      'LIC. TEOLOGIA': 153.0, 'TEOLOGIA': 153.0,
+    },
+    2025: {
+      'MATEMATICAS APLICADAS': 197.0, 'ING. MECATRONICA': 187.0, 'ECONOMIA': 186.5,
+      'MEDICINA': 186.5, 'BIOINGENIERIA': 185.0, 'CIENCIA DE DATOS': 185.0,
+      'ESTUDIOS LITERARIOS': 184.0, 'ING. REDES Y TELECOM.': 184.0, 'SOCIOLOGIA': 183.0,
+      'ING. MECANICA': 181.5, 'HISTORIA': 181.0, 'ING. BIOMEDICA': 181.0,
+      'INGENIERIA DE SISTEMAS': 181.0, 'QUIMICA FARMACEUTICA': 180.0,
+      'ING. ELECTRONICA': 179.5, 'BIOLOGIA': 178.5, 'FILOSOFIA': 178.5,
+      'RELACIONES INTERNACIONALES': 178.0, 'ANTROPOLOGIA': 176.0, 'ECOLOGIA': 176.0,
+      'FINANZAS': 176.0, 'CIENCIA POLITICA': 175.0, 'ESTUDIOS MUSICALES': 175.0,
+      'ING. SISTEMAS Y COMP.': 175.0, 'LIC. LENGUAS MODERNAS': 175.0,
+      'MATEMATICAS': 174.0, 'ING. INDUSTRIAL': 174.0, 'MICROBIOLOGIA': 174.0,
+      'ING. CIVIL': 172.5, 'PSICOLOGIA': 172.5, 'ARTES VISUALES': 172.0,
+      'COMUNICACION SOCIAL': 169.0, 'ARTES ESCENICAS': 168.0,
+      'DISEÑO INDUSTRIAL': 168.0, 'ARQUITECTURA': 167.5, 'BACTERIOLOGIA': 167.0,
+      'NEGOCIOS INTERNACIONALES': 165.0, 'TURISMO': 165.0,
+      'LIC. EDUCACION INFANTIL': 164.0, 'NUTRICION Y DIETETICA': 164.0,
+      'ODONTOLOGIA': 163.0, 'ADMINISTRACION DE EMPRESAS': 162.5,
+      'DISEÑO COM. VISUAL': 162.0, 'GASTRONOMIA': 162.0,
+      'LIC. EDUCACION FISICA': 162.0, 'LIC. LIT. Y LENGUA CASTELLANA': 162.0,
+      'DERECHO': 161.0, 'MERCADEO': 161.0,
+      'CIENCIA INFO. Y BIBLIOTECOL.': 158.0, 'COMUNICACION': 158.0,
+      'CONTADURIA PUBLICA': 157.5, 'ENFERMERIA': 155.5,
+      'LIC. EN FILOSOFIA': 154.0, 'TEOLOGIA': 151.0,
+      'LIC. CIENCIAS NATURALES': 146.0, 'LIC. TEOLOGIA': 138.0,
+    }
+  },
+
+  // Percentiles de corte estimados (basados en distribución normal μ=170.2 σ=19.7)
+  // Para el slider de programas
+  progPercentileThresholds: { // media global por encima de Q3=161 nacional
+    50: 151, 55: 154, 60: 157, 65: 160, 70: 163, 75: 166,
+    80: 169, 85: 173, 90: 177, 95: 183, 99: 193
+  },
+
+  // Parámetros distribución puntajes individuales Javeriana 2025 (normal aproximada)
+  studentMean: 170.0,
+  studentSd: 20.0,
+  totalEval2025: 131680,
+};
+
+// ============================================================
+// CHART.JS DEFAULTS
+// ============================================================
+Chart.defaults.font.family = "'DM Sans', sans-serif";
+Chart.defaults.font.size = 12;
+Chart.defaults.plugins.legend.display = true;
+Chart.defaults.plugins.tooltip.backgroundColor = 'oklch(0.2 0.01 80 / 0.92)';
+Chart.defaults.plugins.tooltip.titleColor = '#ffffff';
+Chart.defaults.plugins.tooltip.bodyColor = '#cccccc';
+Chart.defaults.plugins.tooltip.padding = 10;
+Chart.defaults.plugins.tooltip.cornerRadius = 6;
+
+const PALETTE = ['#01696f','#437a22','#006494','#da7101','#a12c7b','#d19900','#964219','#7a39bb'];
+const PALETTE_ALPHA = (i, a=0.85) => PALETTE[i % PALETTE.length] + Math.round(a*255).toString(16).padStart(2,'0');
+
+function getThemeColors() {
+  const style = getComputedStyle(document.documentElement);
+  return {
+    text: style.getPropertyValue('--color-text').trim(),
+    muted: style.getPropertyValue('--color-text-muted').trim(),
+    faint: style.getPropertyValue('--color-text-faint').trim(),
+    border: style.getPropertyValue('--color-border').trim(),
+    surface: style.getPropertyValue('--color-surface').trim(),
+  };
+}
+
+function chartDefaults(darkAxis=false) {
+  const c = getThemeColors();
+  return {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { labels: { color: c.muted, boxWidth: 12, padding: 12 } } },
+    scales: {
+      x: { grid: { color: c.border + '55', drawBorder: false }, ticks: { color: c.muted } },
+      y: { grid: { color: c.border + '55', drawBorder: false }, ticks: { color: c.muted } }
+    }
+  };
+}
+
+// ============================================================
+// CHART INSTANCES
+// ============================================================
+const charts = {};
+
+function destroyChart(id) {
+  if (charts[id]) { charts[id].destroy(); delete charts[id]; }
+}
+
+function createEvolutionChart() {
+  destroyChart('evolution');
+  const ctx = document.getElementById('chart-evolution').getContext('2d');
+  const c = getThemeColors();
+  charts['evolution'] = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: DATA.years,
+      datasets: [
+        {
+          label: 'Javeriana',
+          data: DATA.javMedia,
+          borderColor: '#01696f', backgroundColor: '#01696f22',
+          tension: 0.4, pointRadius: 5, pointBackgroundColor: '#01696f', borderWidth: 2.5,
+        },
+        {
+          label: 'U. de los Andes',
+          data: [192.81, 184.77, 179.15, 182.40, 181.87, 182.08],
+          borderColor: '#006494', backgroundColor: 'transparent',
+          tension: 0.4, pointRadius: 4, borderWidth: 1.8, borderDash: [],
+        },
+        {
+          label: 'U. Nacional',
+          data: [180.15, 173.49, 173.59, 173.70, 174.54, 172.80],
+          borderColor: '#da7101', backgroundColor: 'transparent',
+          tension: 0.4, pointRadius: 4, borderWidth: 1.8,
+        },
+        {
+          label: 'U. del Rosario',
+          data: [179.58, 173.51, 170.15, 175.28, 179.75, 176.58],
+          borderColor: '#a12c7b', backgroundColor: 'transparent',
+          tension: 0.4, pointRadius: 4, borderWidth: 1.8,
+        }
+      ]
+    },
+    options: {
+      ...chartDefaults(),
+      plugins: {
+        ...chartDefaults().plugins,
+        legend: { display: true, labels: { color: getThemeColors().muted, boxWidth: 12 } }
+      }
+    }
+  });
+}
+
+function createEvaluadosChart() {
+  destroyChart('evaluados');
+  const ctx = document.getElementById('chart-evaluados').getContext('2d');
+  charts['evaluados'] = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: DATA.years,
+      datasets: [{
+        label: 'Evaluados',
+        data: DATA.javEval,
+        backgroundColor: DATA.years.map((_,i) => i===5 ? '#01696f' : '#01696f55'),
+        borderColor: '#01696f', borderWidth: 1, borderRadius: 4,
+      }]
+    },
+    options: {
+      ...chartDefaults(),
+      plugins: {
+        ...chartDefaults().plugins,
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ' ' + ctx.parsed.y.toLocaleString('es-CO') } }
+      },
+      scales: {
+        ...chartDefaults().scales,
+        y: { ...chartDefaults().scales.y, ticks: { ...chartDefaults().scales.y.ticks, callback: v => v.toLocaleString('es-CO') } }
+      }
+    }
+  });
+}
+
+function createRanking2025Chart() {
+  destroyChart('ranking2025');
+  const ctx = document.getElementById('chart-ranking-2025').getContext('2d');
+  const d = DATA.rankings[2025];
+  const labels = d.map(r => r[0].length > 18 ? r[0].slice(0,18)+'…' : r[0]);
+  const vals = d.map(r => r[1]);
+  const colors = d.map(r => r[0].includes('Javeriana') ? '#01696f' : '#01696f44');
+  charts['ranking2025'] = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{ label: 'Media Global', data: vals, backgroundColor: colors, borderRadius: 4 }]
+    },
+    options: {
+      ...chartDefaults(),
+      indexAxis: 'y',
+      plugins: { ...chartDefaults().plugins, legend: { display: false } },
+      scales: {
+        x: { ...chartDefaults().scales.x, min: 160, max: 200 },
+        y: { ...chartDefaults().scales.y }
+      }
+    }
+  });
+}
+
+function createPositionChart() {
+  destroyChart('position');
+  const ctx = document.getElementById('chart-position').getContext('2d');
+  charts['position'] = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: DATA.years,
+      datasets: [{
+        label: 'Posición Javeriana',
+        data: DATA.javPosition,
+        borderColor: '#01696f', backgroundColor: '#01696f22',
+        tension: 0.3, pointRadius: 6, pointBackgroundColor: DATA.javPosition.map(v => v<=5 ? '#437a22' : v<=8 ? '#da7101' : '#a12c7b'),
+        fill: true, borderWidth: 2.5,
+      }]
+    },
+    options: {
+      ...chartDefaults(),
+      plugins: { ...chartDefaults().plugins, legend: { display: false } },
+      scales: {
+        x: chartDefaults().scales.x,
+        y: { ...chartDefaults().scales.y, reverse: true, min: 1, max: 12,
+             ticks: { ...chartDefaults().scales.y.ticks, stepSize: 1 } }
+      }
+    }
+  });
+}
+
+function createInstEvolutionChart() {
+  destroyChart('instEvolution');
+  const ctx = document.getElementById('chart-inst-evolution').getContext('2d');
+  const insts = [
+    { label: 'Javeriana', data: DATA.javMedia, color: '#01696f' },
+    { label: 'U. Andes', data: [192.81, 184.77, 179.15, 182.40, 181.87, 182.08], color: '#006494' },
+    { label: 'U. Nacional', data: [180.15, 173.49, 173.59, 173.70, 174.54, 172.80], color: '#da7101' },
+    { label: 'U. ICESI', data: [179.99, 173.54, 173.31, 172.11, 179.31, 180.66], color: '#a12c7b' },
+    { label: 'U. EIA', data: [184.39, 177.36, 175.04, 178.75, 185.37, 184.01], color: '#d19900' },
+  ];
+  charts['instEvolution'] = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: DATA.years,
+      datasets: insts.map(inst => ({
+        label: inst.label, data: inst.data,
+        borderColor: inst.color, backgroundColor: 'transparent',
+        tension: 0.4, pointRadius: 4, borderWidth: inst.label==='Javeriana' ? 3 : 1.8,
+        borderDash: inst.label==='Javeriana' ? [] : [],
+      }))
+    },
+    options: { ...chartDefaults() }
+  });
+}
+
+function createVolJavChart() {
+  destroyChart('volJav');
+  const ctx = document.getElementById('chart-vol-jav').getContext('2d');
+  charts['volJav'] = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: DATA.years,
+      datasets: [{
+        label: 'Evaluados Javeriana',
+        data: DATA.javEval,
+        backgroundColor: '#01696f88', borderColor: '#01696f', borderWidth: 1, borderRadius: 4
+      }]
+    },
+    options: {
+      ...chartDefaults(),
+      plugins: { ...chartDefaults().plugins, legend: { display: false } },
+      scales: { ...chartDefaults().scales, y: { ...chartDefaults().scales.y, ticks: { callback: v => v.toLocaleString() } } }
+    }
+  });
+}
+
+// ---- RANKING TABLE ----
+function updateRankingTable(year, el) {
+  document.querySelectorAll('#ranking-year-pills .year-pill').forEach(p => p.classList.remove('active'));
+  if (el) el.classList.add('active');
+  document.getElementById('ranking-table-title').textContent = `Ranking Nacional ${year}`;
+  const data = DATA.rankings[year];
+  const tbody = document.querySelector('#ranking-table tbody');
+  tbody.innerHTML = data.map((r, i) => {
+    const isJav = r[0].includes('Javeriana');
+    const rowStyle = isJav ? 'background:var(--color-primary-highlight);font-weight:600' : '';
+    return `<tr style="${rowStyle}">
+      <td><span class="rank-num ${i<3?'top3':''}">${i+1}</span></td>
+      <td>${r[0]}${isJav?' <span class="badge badge-teal">Javeriana</span>':''}</td>
+      <td>${r[1].toFixed(2)}</td>
+      <td>${r[2]}</td>
+      <td>${r[3]}</td>
+      <td>${r[4].toFixed(2)}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ---- TOP PROGRAMS ----
+let topProgChart = null;
+function updateTopPrograms(year, el) {
+  document.querySelectorAll('#prog-year-pills .year-pill').forEach(p => p.classList.remove('active'));
+  if (el) el.classList.add('active');
+  document.getElementById('top-prog-chart-title').textContent = `Top 15 Programas por Puntaje Global — ${year}`;
+  const progs = DATA.programas[year] || DATA.programas[2025];
+  const sorted = Object.entries(progs).sort((a,b) => b[1]-a[1]).slice(0,15);
+  destroyChart('topPrograms');
+  const ctx = document.getElementById('chart-top-programs').getContext('2d');
+  charts['topPrograms'] = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: sorted.map(([k]) => k.length>28 ? k.slice(0,28)+'…' : k),
+      datasets: [{
+        label: 'Media Global',
+        data: sorted.map(([,v]) => v),
+        backgroundColor: sorted.map(([,v], i) => i===0 ? '#d19900' : i<3 ? '#01696f' : '#01696f55'),
+        borderRadius: 4, borderWidth: 0,
+      }]
+    },
+    options: {
+      ...chartDefaults(),
+      indexAxis: 'y',
+      plugins: { ...chartDefaults().plugins, legend: { display: false } },
+      scales: {
+        x: { ...chartDefaults().scales.x, min: 140, max: 210 },
+        y: { ...chartDefaults().scales.y, ticks: { ...chartDefaults().scales.y.ticks, font: { size: 11 } } }
+      }
+    }
+  });
+}
+
+function createProgEvolutionChart() {
+  destroyChart('progEvolution');
+  const ctx = document.getElementById('chart-prog-evolution').getContext('2d');
+  const selectedProgs = ['MEDICINA', 'DERECHO', 'ADMINISTRACION DE EMPRESAS', 'ING. INDUSTRIAL', 'PSICOLOGIA', 'MATEMATICAS'];
+  const datasets = selectedProgs.map((prog, i) => ({
+    label: prog,
+    data: DATA.years.map(y => DATA.programas[y] ? (DATA.programas[y][prog] || null) : null),
+    borderColor: PALETTE[i], backgroundColor: 'transparent',
+    tension: 0.4, pointRadius: 4, borderWidth: 2,
+  }));
+  charts['progEvolution'] = new Chart(ctx, {
+    type: 'line', data: { labels: DATA.years, datasets },
+    options: { ...chartDefaults(), spanGaps: true }
+  });
+}
+
+function createCuartilesChart() {
+  destroyChart('cuartiles');
+  const ctx = document.getElementById('chart-cuartiles').getContext('2d');
+  charts['cuartiles'] = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Cuartil 4 – Top 25% (48)', 'Cuartil 3 – 25-50% (6)', 'Cuartil 2 – 50-75% (1)', 'Cuartil 1 – Inferior (1)'],
+      datasets: [{ data: [48, 6, 1, 1], backgroundColor: ['#437a22', '#006494', '#da7101', '#a12c7b'],
+        borderWidth: 0, hoverOffset: 8 }]
+    },
+    options: {
+      ...chartDefaults(),
+      cutout: '65%',
+      scales: {},
+      plugins: { ...chartDefaults().plugins, legend: { position: 'right', labels: { color: getThemeColors().muted, boxWidth: 12 } } }
+    }
+  });
+}
+
+function createSobreMedianaChart() {
+  destroyChart('sobreMediana');
+  const ctx = document.getElementById('chart-sobre-mediana').getContext('2d');
+  const progs = Object.entries(DATA.programas[2025]).sort((a,b)=>b[1]-a[1]).slice(0,12);
+  const mediaNacional = 161;
+  const puntosMedNac = 10;
+  charts['sobreMediana'] = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: progs.map(([k]) => k.length>18 ? k.slice(0,18)+'…' : k),
+      datasets: [{
+        label: 'Puntos sobre mediana nacional',
+        data: progs.map(([,v]) => parseFloat(((v - mediaNacional) / puntosMedNac).toFixed(2))),
+        backgroundColor: progs.map(([,v]) => v >= mediaNacional ? '#01696f' : '#a12c7b'),
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      ...chartDefaults(),
+      indexAxis: 'y',
+      plugins: { ...chartDefaults().plugins, legend: { display: false } }
+    }
+  });
+}
+
+// ---- COMPETENCIAS ----
+function createRadarChart() {
+  destroyChart('radarComp');
+  const ctx = document.getElementById('chart-radar-comp').getContext('2d');
+  const c = getThemeColors();
+  charts['radarComp'] = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: DATA.competencias.labels,
+      datasets: [
+        { label: 'Javeriana 2025', data: DATA.competencias.javeriana[2025],
+          borderColor: '#01696f', backgroundColor: '#01696f22', pointBackgroundColor: '#01696f', borderWidth: 2.5 },
+        { label: 'Media Nacional 2025', data: DATA.competencias.nacional[2025],
+          borderColor: '#da7101', backgroundColor: '#da710122', pointBackgroundColor: '#da7101', borderWidth: 1.8 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      scales: { r: { min: 140, max: 200, ticks: { stepSize: 15, color: c.muted, backdropColor: 'transparent' }, grid: { color: c.border+'55' }, angleLines: { color: c.border+'55' }, pointLabels: { color: c.muted, font: { size: 11 } } } },
+      plugins: { legend: { labels: { color: c.muted, boxWidth: 12 } } }
+    }
+  });
+}
+
+function createCompEvolutionChart() {
+  destroyChart('compEvolution');
+  const ctx = document.getElementById('chart-comp-evolution').getContext('2d');
+  const labels = DATA.competencias.labels;
+  const years = DATA.years;
+  const datasets = labels.map((label, i) => ({
+    label, data: years.map(y => DATA.competencias.javeriana[y][i]),
+    borderColor: PALETTE[i], backgroundColor: 'transparent',
+    tension: 0.4, pointRadius: 4, borderWidth: 2,
+  }));
+  charts['compEvolution'] = new Chart(ctx, {
+    type: 'line', data: { labels: years, datasets },
+    options: { ...chartDefaults() }
+  });
+}
+
+function createCompInstChart() {
+  destroyChart('compInst');
+  const ctx = document.getElementById('chart-comp-inst').getContext('2d');
+  const compLabels = DATA.competencias.labels;
+  const insts = [
+    { label: 'Javeriana', data: DATA.competencias.javeriana[2025] },
+    { label: 'Media Nacional', data: DATA.competencias.nacional[2025] },
+    { label: 'U. Andes (est.)', data: [215, 192, 188, 185, 175] },
+  ];
+  charts['compInst'] = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: compLabels,
+      datasets: insts.map((inst, i) => ({
+        label: inst.label, data: inst.data,
+        backgroundColor: PALETTE[i] + 'cc', borderRadius: 3,
+      }))
+    },
+    options: { ...chartDefaults(), scales: { ...chartDefaults().scales, y: { ...chartDefaults().scales.y, min: 130, max: 220 } } }
+  });
+}
+
+// ---- PRIORITY ----
+const PRIORITY_DATA = [
+  ['LIC. TEOLOGIA', 138.0, 'Cuartil 1 (Inferior)', -24.6, 'Alta', 'Rediseño urgente del programa y plan de acompañamiento pedagógico intensivo'],
+  ['LIC. CIENCIAS NATURALES', 146.0, 'Cuartil 2 (50–75%)', -5.0, 'Alta', 'Plan de mejora curricular + articulación con Facultad de Ciencias'],
+  ['LIC. EN FILOSOFIA', 154.0, 'Cuartil 3 (25–50%)', -35.8, 'Alta', 'Rediseño profundo — mayor variación negativa histórica desde 2020'],
+  ['TEOLOGIA', 151.0, 'Cuartil 3 (25–50%)', -4.2, 'Alta', 'Revisión curricular + benchmarking con otras instituciones del país'],
+  ['ENFERMERIA', 155.5, 'Cuartil 3 (25–50%)', -7.5, 'Media', 'Fortalecimiento en razonamiento cuantitativo y lectura crítica'],
+  ['CONTADURIA PUBLICA', 157.5, 'Cuartil 3 (25–50%)', -10.2, 'Media', 'Refuerzo en competencias ciudadanas y comunicación escrita'],
+  ['COMUNICACION', 158.0, 'Cuartil 3 (25–50%)', -6.8, 'Media', 'Estrategia de preparación y práctica con simulacros Saber Pro'],
+  ['CIENCIA INFO. Y BIBLIOTECOL.', 158.0, 'Cuartil 3 (25–50%)', -1.4, 'Media', 'Fortalecer componentes genéricos, especialmente inglés'],
+  ['ADMINISTRACION DE EMPRESAS', 162.5, 'Cuartil 4 — límite', -4.2, 'Baja', 'Programa de nivelación en inglés y razonamiento cuantitativo'],
+  ['ARQUITECTURA', 167.5, 'Cuartil 4', -4.9, 'Baja', 'Monitoreo preventivo de competencias cuantitativas'],
+];
+
+function buildPriorityTable() {
+  const tbody = document.getElementById('priority-tbody');
+  tbody.innerHTML = PRIORITY_DATA.map(([prog, media, cuartil, var20, prior, accion]) => {
+    const priorBadge = prior === 'Alta'
+      ? '<span class="badge badge-red">🔴 Alta</span>'
+      : prior === 'Media'
+      ? '<span class="badge badge-orange">🟡 Media</span>'
+      : '<span class="badge badge-blue">🔵 Baja</span>';
+    const varClass = var20 < 0 ? 'trend-down' : var20 > 0 ? 'trend-up' : 'trend-flat';
+    return `<tr>
+      <td style="font-weight:500">${prog}</td>
+      <td>${media.toFixed(1)}</td>
+      <td><span class="badge badge-teal">${cuartil}</span></td>
+      <td class="${varClass}" style="font-variant-numeric:tabular-nums">${var20>0?'+':''}${var20.toFixed(1)}</td>
+      <td>${priorBadge}</td>
+      <td style="color:var(--color-text-muted);font-size:var(--text-xs);max-width:240px">${accion}</td>
+    </tr>`;
+  }).join('');
+}
+
+function createRiskMapChart() {
+  destroyChart('riskMap');
+  const ctx = document.getElementById('chart-risk-map').getContext('2d');
+  const allProgs = Object.entries(DATA.programas[2025]);
+  const prior2020 = DATA.programas[2020];
+  const points = allProgs.map(([k, v]) => {
+    const v2020 = prior2020[k];
+    const variation = v2020 ? v - v2020 : 0;
+    const color = v < 158 ? '#a12c7b' : v < 165 ? '#da7101' : '#01696f';
+    return { x: v, y: variation, label: k, color };
+  });
+  charts['riskMap'] = new Chart(ctx, {
+    type: 'scatter',
+    data: {
+      datasets: [{
+        label: 'Programas',
+        data: points.map(p => ({ x: p.x, y: p.y })),
+        backgroundColor: points.map(p => p.color + 'cc'),
+        pointRadius: 6, pointHoverRadius: 9,
+      }]
+    },
+    options: {
+      ...chartDefaults(),
+      plugins: { ...chartDefaults().plugins, legend: { display: false },
+        tooltip: { callbacks: { label: ctx => { const p = points[ctx.dataIndex]; return `${p.label}: ${p.x.toFixed(1)} | Var: ${p.y.toFixed(1)}`; } } }
+      },
+      scales: {
+        x: { ...chartDefaults().scales.x, title: { display: true, text: 'Media Global 2025', color: getThemeColors().muted } },
+        y: { ...chartDefaults().scales.y, title: { display: true, text: 'Variación 2020→2025', color: getThemeColors().muted } }
+      }
+    }
+  });
+}
+
+function createPriorityDistChart() {
+  destroyChart('priorityDist');
+  const ctx = document.getElementById('chart-priority-dist').getContext('2d');
+  charts['priorityDist'] = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Prioridad Alta', 'Prioridad Media', 'Prioridad Baja', 'Sin acción urgente'],
+      datasets: [{ data: [4, 4, 2, 46], backgroundColor: ['#a12c7b', '#da7101', '#006494', '#437a22'], borderWidth: 0 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '60%',
+      scales: {},
+      plugins: { legend: { position: 'right', labels: { color: getThemeColors().muted, boxWidth: 12 } } }
+    }
+  });
+}
+
+// ---- INCENTIVOS ----
+let inctProgChart = null;
+let inctStuChart = null;
+
+function updateIncentivos() {
+  const val = parseInt(document.getElementById('prog-percentile').value);
+  document.getElementById('prog-percentile-display').textContent = `P${val}`;
+
+  // Find nearest threshold
+  const thresholds = DATA.progPercentileThresholds;
+  const nearestKey = Object.keys(thresholds).map(Number).reduce((prev, curr) =>
+    Math.abs(curr - val) < Math.abs(prev - val) ? curr : prev
+  );
+  const threshold = thresholds[nearestKey];
+  document.getElementById('prog-threshold').textContent = threshold;
+  document.getElementById('incentivo-prog-title').textContent = `Programas con incentivo — P${val}`;
+
+  const progs = Object.entries(DATA.programas[2025]);
+  const qualify = progs.filter(([, v]) => v >= threshold);
+  const excluded = progs.length - qualify.length;
+
+  document.getElementById('prog-qualify-count').textContent = qualify.length;
+  document.getElementById('prog-total-count').textContent = progs.length;
+  document.getElementById('prog-excluded-count').textContent = excluded;
+
+  // Chart
+  destroyChart('inctivoProgChart');
+  const canvas = document.getElementById('chart-incentivo-prog');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const sorted = qualify.sort((a, b) => b[1] - a[1]).slice(0, 20);
+  charts['inctivoProgChart'] = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: sorted.map(([k]) => k.length > 22 ? k.slice(0, 22) + '…' : k),
+      datasets: [{
+        label: 'Media Global',
+        data: sorted.map(([, v]) => v),
+        backgroundColor: sorted.map(([, v]) => v >= threshold + 10 ? '#437a22' : '#01696f'),
+        borderRadius: 3, borderWidth: 0
+      }]
+    },
+    options: {
+      ...chartDefaults(), indexAxis: 'y',
+      plugins: { ...chartDefaults().plugins, legend: { display: false } },
+      scales: {
+        x: { ...chartDefaults().scales.x, min: threshold - 10, max: 210,
+          annotations: {} },
+        y: { ...chartDefaults().scales.y, ticks: { ...chartDefaults().scales.y.ticks, font: { size: 10 } } }
+      }
+    }
+  });
+}
+
+function updateStudentIncentivos() {
+  const val = parseFloat(document.getElementById('stu-percentile').value);
+  document.getElementById('stu-percentile-display').textContent = `P${val.toFixed(1)}`;
+
+  const pct = 1 - val / 100;
+  const total = DATA.totalEval2025;
+  const estimated = Math.round(total * pct);
+
+  // Inverse normal approx (Beasley-Springer-Moro)
+  function invNormApprox(p) {
+    const a = [2.50662823884, -18.61500062529, 41.39119773534, -25.44106049637];
+    const b = [-8.47351093090, 23.08336743743, -21.06224101826, 3.13082909833];
+    const c = [0.3374754822726147, 0.9761690190917186, 0.1607979714918209, 0.0276438810333863, 0.0038405729373609, 0.0003951896511349, 0.0000321767881768, 0.0000002888167364, 0.0000003960315187];
+    let r;
+    if (p < 0.08 || p > 0.92) {
+      r = p < 0.5 ? p : 1 - p;
+      r = Math.log(-Math.log(r));
+      r = c[0] + r * (c[1] + r * (c[2] + r * (c[3] + r * (c[4] + r * (c[5] + r * (c[6] + r * (c[7] + r * c[8])))))));
+      if (p < 0.5) r = -r;
+    } else {
+      r = p - 0.5;
+      let s = r * r;
+      r = r * (a[0] + s * (a[1] + s * (a[2] + s * a[3]))) / (1 + s * (b[0] + s * (b[1] + s * (b[2] + s * b[3]))));
+    }
+    return r;
+  }
+
+  const z = invNormApprox(val / 100);
+  const minScore = Math.round(DATA.studentMean + z * DATA.studentSd);
+
+  document.getElementById('stu-top-count').textContent = estimated.toLocaleString('es-CO');
+  document.getElementById('stu-top-pct').textContent = `(${(pct * 100).toFixed(2)}% de 131.680)`;
+  document.getElementById('stu-min-score').textContent = minScore;
+  document.getElementById('incentivo-stu-title').textContent = `Distribución de puntajes — Top P${val.toFixed(1)} Javeriana 2025`;
+
+  // Build distribution chart showing normal curve + cutoff
+  destroyChart('inctivoStuChart');
+  const canvas = document.getElementById('chart-incentivo-stu');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const μ = DATA.studentMean, σ = DATA.studentSd;
+  const xVals = Array.from({ length: 80 }, (_, i) => μ - 3 * σ + i * (6 * σ / 79));
+  const yVals = xVals.map(x => Math.exp(-0.5 * ((x - μ) / σ) ** 2) / (σ * Math.sqrt(2 * Math.PI)));
+  const maxY = Math.max(...yVals);
+
+  charts['inctivoStuChart'] = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: xVals.map(v => v.toFixed(0)),
+      datasets: [
+        {
+          label: 'Distribución puntajes',
+          data: yVals,
+          borderColor: '#01696f', backgroundColor: '#01696f22',
+          fill: true, tension: 0.4, pointRadius: 0, borderWidth: 2.5,
+        },
+        {
+          label: `Top P${val.toFixed(1)} (N≈${estimated.toLocaleString()})`,
+          data: xVals.map(x => x >= minScore ? Math.exp(-0.5 * ((x - μ) / σ) ** 2) / (σ * Math.sqrt(2 * Math.PI)) : null),
+          borderColor: '#d19900', backgroundColor: '#d1990055',
+          fill: true, tension: 0.4, pointRadius: 0, borderWidth: 0,
+          spanGaps: false,
+        }
+      ]
+    },
+    options: {
+      ...chartDefaults(),
+      plugins: {
+        ...chartDefaults().plugins,
+        legend: { display: true, labels: { color: getThemeColors().muted, boxWidth: 12 } },
+        tooltip: {
+          callbacks: {
+            title: ctx => `Puntaje ≈ ${ctx[0].label}`,
+            label: ctx => ctx.datasetIndex === 0 ? '' : `Top ${(pct*100).toFixed(2)}%: ≥${minScore} pts`
+          }
+        }
+      },
+      scales: {
+        x: { ...chartDefaults().scales.x,
+          ticks: { ...chartDefaults().scales.x.ticks, maxTicksLimit: 10 },
+          title: { display: true, text: 'Puntaje Global', color: getThemeColors().muted }
+        },
+        y: { display: false }
+      }
+    }
+  });
+}
+
+// ============================================================
+// NAV & SECTIONS
+// ============================================================
+const sectionTitles = {
+  overview: 'Resumen Global',
+  national: 'Ranking Nacional',
+  programs: 'Programas Javeriana',
+  competencias: 'Competencias Genéricas',
+  priority: 'Programas Prioritarios',
+  incentivos: 'Herramienta de Incentivos',
+};
+
+function showSection(id, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const sec = document.getElementById('sec-' + id);
+  if (sec) sec.classList.add('active');
+  if (el) el.classList.add('active');
+  document.getElementById('topbar-title').textContent = sectionTitles[id] || id;
+  // Lazy init charts
+  setTimeout(() => initSectionCharts(id), 50);
+  if (window.innerWidth < 768) closeSidebar();
+}
+
+function showTab(tabId, el) {
+  const parent = el.closest('.section') || document.querySelector('.section.active');
+  if (!parent) return;
+  parent.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  parent.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  const tab = document.getElementById(tabId);
+  if (tab) {
+    tab.classList.add('active');
+    setTimeout(() => {
+      if (tabId === 'prog-tab-top') updateTopPrograms(2025, null);
+      if (tabId === 'prog-tab-evolution') createProgEvolutionChart();
+      if (tabId === 'prog-tab-cuartiles') { createCuartilesChart(); createSobreMedianaChart(); }
+    }, 50);
+  }
+}
+
+function initSectionCharts(id) {
+  if (id === 'overview') {
+    createEvolutionChart();
+    createEvaluadosChart();
+    createRanking2025Chart();
+    createPositionChart();
+  } else if (id === 'national') {
+    updateRankingTable(2020, null);
+    createInstEvolutionChart();
+    createVolJavChart();
+  } else if (id === 'programs') {
+    updateTopPrograms(2025, null);
+  } else if (id === 'competencias') {
+    createRadarChart();
+    createCompEvolutionChart();
+    createCompInstChart();
+  } else if (id === 'priority') {
+    buildPriorityTable();
+    createRiskMapChart();
+    createPriorityDistChart();
+  } else if (id === 'incentivos') {
+    updateIncentivos();
+    updateStudentIncentivos();
+  }
+}
+
+// ============================================================
+// THEME TOGGLE
+// ============================================================
+(function() {
+  const t = document.querySelector('[data-theme-toggle]');
+  const r = document.documentElement;
+  let d = matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light';
+  r.setAttribute('data-theme', d);
+  if (t) t.addEventListener('click', () => {
+    d = d === 'dark' ? 'light' : 'dark';
+    r.setAttribute('data-theme', d);
+    // Redraw all visible charts
+    setTimeout(() => {
+      const activeSection = document.querySelector('.section.active');
+      if (activeSection) {
+        const id = activeSection.id.replace('sec-', '');
+        initSectionCharts(id);
+      }
+    }, 100);
+  });
+})();
+
+// ============================================================
+// SIDEBAR
+// ============================================================
+function toggleSidebar() {
+  const sb = document.getElementById('sidebar');
+  const overlay = document.getElementById('mobile-overlay');
+  sb.classList.toggle('open');
+  overlay.classList.toggle('show');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('mobile-overlay').classList.remove('show');
+}
+
+// ============================================================
+// FILE UPLOAD
+// ============================================================
+function handleDragOver(e) {
+  e.preventDefault();
+  document.getElementById('upload-zone').classList.add('drag-over');
+}
+function handleDragLeave() {
+  document.getElementById('upload-zone').classList.remove('drag-over');
+}
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('upload-zone').classList.remove('drag-over');
+  const files = e.dataTransfer.files;
+  if (files.length > 0) processFile(files[0]);
+}
+function handleFileUpload(e) {
+  if (e.target.files.length > 0) processFile(e.target.files[0]);
+}
+function processFile(file) {
+  const status = document.getElementById('upload-status');
+  status.className = 'upload-status';
+  if (!file.name.match(/\.(xlsx|xls|csv)$/i)) {
+    status.className = 'upload-status error';
+    status.textContent = '❌ Formato no soportado. Por favor carga un archivo .xlsx, .xls o .csv del ICFES.';
+    return;
+  }
+  status.className = 'upload-status success';
+  status.innerHTML = `✅ <strong>${file.name}</strong> cargado correctamente (${(file.size/1024).toFixed(0)} KB). Para procesar los datos con Python/pandas e integrarlos a esta herramienta, ejecuta el notebook de análisis con el nuevo archivo y exporta los JSONs de resumen. En una implementación con backend, los datos se actualizarían automáticamente.`;
+}
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  initSectionCharts('overview');
+  updateRankingTable(2020, null);
+  buildPriorityTable();
+});
+</script>
+</body>
+</html>
